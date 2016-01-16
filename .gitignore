@@ -25,3 +25,12 @@ proguard/
 
 # Log Files
 *.log
+
+# Android Studio
+.navigation/
+captures/
+*.iml
+.idea
+
+# OS Files
+.DS_Store

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <!-- 8 = UsbConstants.USB_CLASS_MASS_STORAGE -->
+    <usb-device class="8"/>
+</resources>
