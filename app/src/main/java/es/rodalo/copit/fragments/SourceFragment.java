@@ -1,22 +1,16 @@
 package es.rodalo.copit.fragments;
 
-import com.nononsenseapps.filepicker.FilePickerActivity;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
 import org.apache.commons.io.comparator.LastModifiedFileComparator;
 import org.apache.commons.io.filefilter.FalseFileFilter;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
 
@@ -27,7 +21,6 @@ import java.util.Collections;
 import java.util.List;
 
 import es.rodalo.copit.R;
-import es.rodalo.copit.utils.Preferences;
 import es.rodalo.copit.views.adapters.ImageAdapter;
 
 /**
@@ -36,7 +29,7 @@ import es.rodalo.copit.views.adapters.ImageAdapter;
 public class SourceFragment extends Fragment {
 
     private static final String ARG_SOURCE_PATH = "path";
-    private static final int REQUEST_SOURCE_DIRECTORY = 1;
+
     private static final String[] imageExtensions = new String[]{"jpg", "jpeg", "png", "gif", "bmp"};
     private static final String[] videoExtensions = new String[]{"avi", "mpg", "mpeg", "mov"};
 
@@ -82,23 +75,6 @@ public class SourceFragment extends Fragment {
         mTextTitle = (TextView) view.findViewById(R.id.source_text_title);
         mTextSubtitle = (TextView) view.findViewById(R.id.source_text_subtitle);
         mGridPhotos = (GridView) view.findViewById(R.id.source_grid_photos);
-
-        Button chooseSourceButton = (Button) view.findViewById(R.id.source_button_directory);
-
-        chooseSourceButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent i = new Intent(getActivity(), FilePickerActivity.class);
-
-                i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
-                i.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, false);
-                i.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_DIR);
-                i.putExtra(FilePickerActivity.EXTRA_START_PATH, Environment.getExternalStorageDirectory().getPath());
-
-                startActivityForResult(i, REQUEST_SOURCE_DIRECTORY);
-            }
-        });
 
         updateLabels();
 
@@ -199,23 +175,15 @@ public class SourceFragment extends Fragment {
 
 
     /**
-     * Gestiona la respuesta del selector de directorios
+     * Cambia la ruta asociada a este fragmento
      */
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void changePath(String path) {
 
-        super.onActivityResult(requestCode, resultCode, data);
+        mPath = path;
 
-        if (REQUEST_SOURCE_DIRECTORY == requestCode && Activity.RESULT_OK == resultCode) {
+        updateLabels();
 
-            mPath = data.getData().getPath();
-
-            Preferences.setSourceFolder(mPath);
-
-            updateLabels();
-
-            loadPhotos();
-        }
+        loadPhotos();
     }
 
 }

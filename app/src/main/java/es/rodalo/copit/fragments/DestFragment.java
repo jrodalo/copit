@@ -1,11 +1,6 @@
 package es.rodalo.copit.fragments;
 
-import com.nononsenseapps.filepicker.FilePickerActivity;
-
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +11,6 @@ import android.widget.TextView;
 import java.io.File;
 
 import es.rodalo.copit.R;
-import es.rodalo.copit.utils.Preferences;
 
 /**
  * Fragmento encargado de la sección de destino
@@ -24,7 +18,6 @@ import es.rodalo.copit.utils.Preferences;
 public class DestFragment extends Fragment {
 
     private static final String ARG_DEST_PATH = "path";
-    private static final int REQUEST_DEST_DIRECTORY = 2;
 
     private String mPath;
     private TextView mTextTitle;
@@ -68,20 +61,6 @@ public class DestFragment extends Fragment {
         mProgressBar = (ProgressBar) view.findViewById(R.id.dest_progress);
         mTextProgress = (TextView) view.findViewById(R.id.dest_text_progress);
         mTextTitle = (TextView) view.findViewById(R.id.dest_text_title);
-        mTextTitle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent i = new Intent(getActivity(), FilePickerActivity.class);
-
-                i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
-                i.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, true);
-                i.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_DIR);
-                i.putExtra(FilePickerActivity.EXTRA_START_PATH, mPath.isEmpty() ? Environment.getExternalStorageDirectory().getPath() : mPath);
-
-                startActivityForResult(i, REQUEST_DEST_DIRECTORY);
-            }
-        });
 
         updateLabels();
 
@@ -147,21 +126,13 @@ public class DestFragment extends Fragment {
 
 
     /**
-     * Gestiona la respuesta del selector de directorios
+     * Cambia la ruta asociada a este fragmento
      */
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void changePath(String path) {
 
-        super.onActivityResult(requestCode, resultCode, data);
+        mPath = path;
 
-        if (REQUEST_DEST_DIRECTORY == requestCode && Activity.RESULT_OK == resultCode) {
-
-            mPath = data.getData().getPath();
-
-            Preferences.setDestFolder(mPath);
-
-            updateLabels();
-        }
+        updateLabels();
     }
 
 }
