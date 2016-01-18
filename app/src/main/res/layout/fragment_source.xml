@@ -59,18 +59,6 @@
             />
         </LinearLayout>
 
-        <Button
-                android:id="@+id/source_button_directory"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/ellipsis"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:textColor="@android:color/white"
-                android:background="?android:attr/selectableItemBackground"
-        />
-
     </RelativeLayout>
 
 </RelativeLayout>

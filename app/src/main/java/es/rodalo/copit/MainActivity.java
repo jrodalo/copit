@@ -1,5 +1,9 @@
 package es.rodalo.copit;
 
+import com.nononsenseapps.filepicker.FilePickerActivity;
+
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -7,12 +11,16 @@ import android.content.IntentFilter;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.os.Bundle;
-import android.provider.MediaStore;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,11 +40,14 @@ import es.rodalo.copit.utils.Preferences;
  */
 public class MainActivity extends FragmentActivity {
 
+    private static final int REQUEST_SOURCE_DIRECTORY = 1;
+    private static final int REQUEST_DEST_DIRECTORY = 2;
     private static final float MINIMUM_BATTERY_LEVEL = 5f; // 5%
 
     private FloatingActionButton mFabCopy;
     private SourceFragment mSourceFragment;
     private DestFragment mDestFragment;
+    private Dialog mChooseFoldersDialog;
 
 
     @Override
@@ -57,6 +68,18 @@ public class MainActivity extends FragmentActivity {
             @Override
             public void onClick(View v) {
                 startCopy();
+            }
+
+        });
+
+        Button openFolderDialogButton = (Button) findViewById(R.id.main_open_dialog);
+
+        openFolderDialogButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                openFolderDialog();
             }
 
         });
@@ -83,6 +106,75 @@ public class MainActivity extends FragmentActivity {
         LocalBroadcastManager.getInstance(this).registerReceiver(onCopyEvent, filter);
 
         checkUsb();
+    }
+
+
+    /**
+     * Abre el menú inferior que permite seleccionar las carpetas de origen/destino
+     */
+    private void openFolderDialog() {
+
+        View view = getLayoutInflater().inflate(R.layout.dialog_choose_folders, null);
+
+        TextView chooseSourceButton = (TextView) view.findViewById(R.id.text_choose_source);
+        TextView chooseDestButton = (TextView) view.findViewById(R.id.text_choose_dest);
+
+        mChooseFoldersDialog = new Dialog(MainActivity.this, R.style.MaterialDialogSheet);
+        mChooseFoldersDialog.setContentView(view);
+        mChooseFoldersDialog.setCancelable(true);
+        mChooseFoldersDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        mChooseFoldersDialog.getWindow().setGravity(Gravity.BOTTOM);
+        mChooseFoldersDialog.show();
+
+        chooseSourceButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                chooseSource();
+                mChooseFoldersDialog.dismiss();
+            }
+        });
+
+        chooseDestButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                chooseDest();
+                mChooseFoldersDialog.dismiss();
+            }
+        });
+    }
+
+
+    /**
+     * Muestra el selector de directorios para la carpeta de origen
+     */
+    private void chooseSource() {
+
+        Intent i = new Intent(MainActivity.this, FilePickerActivity.class);
+
+        i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
+        i.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, false);
+        i.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_DIR);
+        i.putExtra(FilePickerActivity.EXTRA_START_PATH, Environment.getExternalStorageDirectory().getPath());
+
+        startActivityForResult(i, REQUEST_SOURCE_DIRECTORY);
+    }
+
+
+    /**
+     * Muestra el selector de directorios para la carpeta de destino
+     */
+    private void chooseDest() {
+
+        Intent i = new Intent(MainActivity.this, FilePickerActivity.class);
+
+        i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
+        i.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, true);
+        i.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_DIR);
+        i.putExtra(FilePickerActivity.EXTRA_START_PATH, Environment.getExternalStorageDirectory().getPath());
+
+        startActivityForResult(i, REQUEST_DEST_DIRECTORY);
     }
 
 
@@ -172,7 +264,7 @@ public class MainActivity extends FragmentActivity {
                 startService(intent);
             }
 
-        } catch(IOException ex) {
+        } catch (IOException ex) {
             Message.error(mDestFragment.getView(), ex.getMessage());
         }
     }
@@ -280,6 +372,42 @@ public class MainActivity extends FragmentActivity {
         if (device != null) {
             //mUsbManager.requestPermission(mDevice, mPermissionIntent);
             Message.success(mDestFragment.getView(), device.getDeviceName());
+        }
+    }
+
+
+    /**
+     * Gestiona la respuesta del selector de directorios
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+
+        if (REQUEST_SOURCE_DIRECTORY == requestCode) {
+
+            String path = data.getData().getPath();
+
+            Preferences.setSourceFolder(path);
+
+            mSourceFragment.changePath(path);
+
+            return;
+        }
+
+        if (REQUEST_DEST_DIRECTORY == requestCode) {
+
+            String path = data.getData().getPath();
+
+            Preferences.setDestFolder(path);
+
+            mDestFragment.changePath(path);
+
+            return;
         }
     }
 

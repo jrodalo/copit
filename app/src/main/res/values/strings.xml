@@ -25,6 +25,9 @@
     <string name="copy_error_samefolder">Las carpetas no pueden ser la misma</string>
     <string name="copy_error_battery">Tienes poca batería</string>
 
+    <string name="button_select_source">Seleccionar origen</string>
+    <string name="button_select_dest">Seleccionar destino</string>
+
     <string name="nnf_new_folder">Nueva carpeta</string>
     <string name="nnf_create_folder_error">Error al crear la carpeta</string>
     <string name="nnf_name">Nombre</string>
