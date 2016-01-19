@@ -1,13 +1,13 @@
 package es.rodalo.copit;
 
-import org.apache.commons.io.FileUtils;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
 import java.io.IOException;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -15,16 +15,8 @@ import static org.junit.Assert.assertThat;
  */
 public class CopyUnitTest {
 
-    private File createTempFolder(String name) {
-
-        File temp = FileUtils.getTempDirectory();
-
-        File source = new File(temp, name);
-
-        source.mkdir();
-
-        return source;
-    }
+    @Rule
+    public TemporaryFolder tempFolder = new TemporaryFolder();
 
 
     @Test(expected = IOException.class)
@@ -33,7 +25,7 @@ public class CopyUnitTest {
         MainActivity activity = new MainActivity();
 
         File source = new File("random_source_folder");
-        File dest = createTempFolder("test-dest");
+        File dest = tempFolder.newFolder("test-dest");
 
         assertThat(activity.canExecuteCopy(source, dest), is(false));
     }
@@ -44,7 +36,7 @@ public class CopyUnitTest {
 
         MainActivity activity = new MainActivity();
 
-        File source = createTempFolder("test-source");
+        File source = tempFolder.newFolder("test-source");
         File dest = new File("random_dest_folder");
 
         assertThat(activity.canExecuteCopy(source, dest), is(false));
@@ -56,11 +48,10 @@ public class CopyUnitTest {
 
         MainActivity activity = new MainActivity();
 
-        File source = createTempFolder("test-source");
+        File source = tempFolder.newFolder("test-source");
 
         assertThat(activity.canExecuteCopy(source, source), is(false));
     }
-
 
 }
 
