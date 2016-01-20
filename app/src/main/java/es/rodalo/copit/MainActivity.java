@@ -63,6 +63,8 @@ public class MainActivity extends FragmentActivity {
 
         mFabCopy = (FloatingActionButton) findViewById(R.id.main_fab_copy);
 
+        mFabCopy.setVisibility(CopyService.isRunning() ? View.INVISIBLE : View.VISIBLE);
+
         mFabCopy.setOnClickListener(new View.OnClickListener() {
 
             @Override
