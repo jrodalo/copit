@@ -20,13 +20,17 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FalseFileFilter;
 import org.apache.commons.io.filefilter.FileFileFilter;
 
+import android.app.ActivityManager;
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+
+import es.rodalo.copit.utils.ApplicationContext;
 
 
 /**
@@ -139,4 +143,22 @@ public class CopyService extends IntentService {
     private void publish(Intent intent) {
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
+
+
+    /**
+     * Comprueba si este servicio esta ejecutándose
+     */
+    public static boolean isRunning() {
+
+        ActivityManager manager = (ActivityManager) ApplicationContext.getAppContext().getSystemService(Context.ACTIVITY_SERVICE);
+
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (CopyService.class.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }
