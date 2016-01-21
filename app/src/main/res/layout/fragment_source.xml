@@ -38,6 +38,7 @@
                     android:id="@+id/source_text_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:contentDescription="@string/source"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textColor="@android:color/white"
                     android:textStyle="bold"

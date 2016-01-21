@@ -406,26 +406,19 @@ public class MainActivity extends FragmentActivity {
             return;
         }
 
-        if (REQUEST_SOURCE_DIRECTORY == requestCode) {
+        String path = data.getData().getPath();
 
-            String path = data.getData().getPath();
+        switch (requestCode) {
 
-            Preferences.setSourceFolder(path);
+            case REQUEST_SOURCE_DIRECTORY:
+                Preferences.setSourceFolder(path);
+                mSourceFragment.changePath(path);
+                break;
 
-            mSourceFragment.changePath(path);
-
-            return;
-        }
-
-        if (REQUEST_DEST_DIRECTORY == requestCode) {
-
-            String path = data.getData().getPath();
-
-            Preferences.setDestFolder(path);
-
-            mDestFragment.changePath(path);
-
-            return;
+            case REQUEST_DEST_DIRECTORY:
+                Preferences.setDestFolder(path);
+                mDestFragment.changePath(path);
+                break;
         }
     }
 
