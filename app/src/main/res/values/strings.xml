@@ -3,7 +3,13 @@
     <string name="app_name">Copit</string>
 
     <string name="ellipsis">…</string>
+
+    <string name="select_folders_description">Seleccionar carpetas</string>
     <string name="select_folder">Selecciona una carpeta</string>
+    <string name="button_select_source">Seleccionar origen</string>
+    <string name="button_select_dest">Seleccionar destino</string>
+    <string name="source">Origen</string>
+    <string name="dest">Destino</string>
 
     <plurals name="photos_count">
         <item quantity="one">%d foto</item>
@@ -24,9 +30,6 @@
     <string name="copy_error_dest">Debes indicar la carpeta de destino</string>
     <string name="copy_error_samefolder">Las carpetas no pueden ser la misma</string>
     <string name="copy_error_battery">Tienes poca batería</string>
-
-    <string name="button_select_source">Seleccionar origen</string>
-    <string name="button_select_dest">Seleccionar destino</string>
 
     <string name="nnf_new_folder">Nueva carpeta</string>
     <string name="nnf_create_folder_error">Error al crear la carpeta</string>
