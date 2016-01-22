@@ -16,7 +16,7 @@
 
 package es.rodalo.copit.views.adapters;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 
 import android.content.Context;
 import android.view.View;
@@ -58,21 +58,20 @@ public class ImageAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View recycled, ViewGroup parent) {
 
-        SquaredImageView view = (SquaredImageView) convertView;
+        SquaredImageView view = (SquaredImageView) recycled;
 
         if (view == null) {
             view = new SquaredImageView(context);
-            view.setScaleType(ImageView.ScaleType.CENTER_CROP);
         }
 
         File image = getItem(position);
 
-        Picasso.with(context)
+        Glide.with(context)
                 .load(image)
                 .centerCrop()
-                .fit()
+                .crossFade()
                 .into(view);
 
         return view;
