@@ -30,7 +30,7 @@ import java.util.List;
 import es.rodalo.copit.views.widgets.SquaredImageView;
 
 /**
- * Muestra las fotos en grid usando la librería Picasso
+ * Muestra las fotos en grid usando la librería Glide
  */
 public class ImageAdapter extends BaseAdapter {
 
