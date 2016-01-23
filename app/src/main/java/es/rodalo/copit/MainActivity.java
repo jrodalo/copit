@@ -28,6 +28,7 @@ import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -306,8 +307,6 @@ public class MainActivity extends FragmentActivity {
 
             } else if (CopyService.ACTION_PROGRESS.equals(intent.getAction())) {
 
-                hideCopyButton();
-
                 if (mDestFragment.isAdded()) {
 
                     int progress = intent.getIntExtra(CopyService.RESPONSE_PROGRESS, 0);
@@ -325,13 +324,18 @@ public class MainActivity extends FragmentActivity {
                     mDestFragment.hideProgress();
                 }
 
-                showCopyButton();
-
                 if (result) {
                     Message.success(mDestFragment.getView(), getString(R.string.copy_success));
                 } else {
                     Message.error(mDestFragment.getView(), getString(R.string.copy_error));
                 }
+
+                // Necesario para evitar un problema cuando el servicio termina muy rápido
+                new Handler().postDelayed(new Runnable() {
+                    public void run() {
+                        showCopyButton();
+                    }
+                }, 500);
             }
         }
     };
