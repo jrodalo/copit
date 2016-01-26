@@ -9,4 +9,7 @@
     <color name="colorWarning">#FFC107</color>
     <color name="colorError">#F44336</color>
 
+    <color name="colorButtonNormal">#99DD55</color>
+    <color name="colorOverlay">#50242424</color>
+
 </resources>
