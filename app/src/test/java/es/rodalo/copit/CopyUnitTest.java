@@ -16,7 +16,7 @@ import static org.junit.Assert.assertThat;
 public class CopyUnitTest {
 
     @Rule
-    public TemporaryFolder tempFolder = new TemporaryFolder();
+    public final TemporaryFolder tempFolder = new TemporaryFolder();
 
 
     @Test(expected = IOException.class)

@@ -1,49 +1,49 @@
-<RelativeLayout
+<LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
 >
-
-    <GridView
-            android:id="@+id/source_grid_photos"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:scrollbars="none"
-            android:numColumns="3"
-            android:horizontalSpacing="@dimen/grid_cell_spacing"
-            android:verticalSpacing="@dimen/grid_cell_spacing"
-            android:listSelector="@null"
-            android:clickable="false"
-    />
-
     <RelativeLayout
+            android:id="@+id/source_grid_panel"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/radial_gradient"
-            android:clickable="false"
+            android:layout_gravity="center"
+            android:visibility="gone"
     >
+
+        <GridView
+                android:id="@+id/source_grid_photos"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:scrollbars="none"
+                android:numColumns="3"
+                android:horizontalSpacing="@dimen/grid_cell_spacing"
+                android:verticalSpacing="@dimen/grid_cell_spacing"
+                android:listSelector="@null"
+                android:clickable="false"
+        />
 
         <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="#50242424"
+                android:gravity="center"
         >
 
             <TextView
                     android:id="@+id/source_text_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:contentDescription="@string/source"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textColor="@android:color/white"
                     android:textStyle="bold"
                     android:layout_gravity="center"
-                    android:layout_weight="1"
                     android:gravity="bottom|center_horizontal"
                     tools:text="Title"
             />
@@ -53,7 +53,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:layout_weight="1"
                     android:gravity="top|center_horizontal"
                     android:textColor="@android:color/white"
                     tools:text="Subtitle"
@@ -62,4 +61,32 @@
 
     </RelativeLayout>
 
-</RelativeLayout>
+
+    <LinearLayout
+            android:id="@+id/source_select_folder_panel"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:background="#50242424"
+    >
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="bottom|center_horizontal"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@android:color/white"
+                android:text="@string/source_select_folder"
+        />
+
+        <Button
+                android:id="@+id/source_select_folder_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/source_select_folder_button"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+        />
+
+    </LinearLayout>
+</LinearLayout>
