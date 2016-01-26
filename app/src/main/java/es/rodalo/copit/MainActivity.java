@@ -16,9 +16,6 @@
 
 package es.rodalo.copit;
 
-import com.nononsenseapps.filepicker.FilePickerActivity;
-
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -27,7 +24,6 @@ import android.content.IntentFilter;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
@@ -57,8 +53,6 @@ import es.rodalo.copit.utils.Preferences;
  */
 public class MainActivity extends FragmentActivity {
 
-    private static final int REQUEST_SOURCE_DIRECTORY = 1;
-    private static final int REQUEST_DEST_DIRECTORY = 2;
     private static final float MINIMUM_BATTERY_LEVEL = 5f; // 5%
 
     private FloatingActionButton mFabCopy;
@@ -149,7 +143,7 @@ public class MainActivity extends FragmentActivity {
 
             @Override
             public void onClick(View v) {
-                chooseSource();
+                mSourceFragment.chooseSource();
                 mChooseFoldersDialog.dismiss();
             }
         });
@@ -158,42 +152,10 @@ public class MainActivity extends FragmentActivity {
 
             @Override
             public void onClick(View v) {
-                chooseDest();
+                mDestFragment.chooseDest();
                 mChooseFoldersDialog.dismiss();
             }
         });
-    }
-
-
-    /**
-     * Muestra el selector de directorios para la carpeta de origen
-     */
-    private void chooseSource() {
-
-        Intent i = new Intent(MainActivity.this, FilePickerActivity.class);
-
-        i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
-        i.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, false);
-        i.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_DIR);
-        i.putExtra(FilePickerActivity.EXTRA_START_PATH, Environment.getExternalStorageDirectory().getPath());
-
-        startActivityForResult(i, REQUEST_SOURCE_DIRECTORY);
-    }
-
-
-    /**
-     * Muestra el selector de directorios para la carpeta de destino
-     */
-    private void chooseDest() {
-
-        Intent i = new Intent(MainActivity.this, FilePickerActivity.class);
-
-        i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
-        i.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, true);
-        i.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_DIR);
-        i.putExtra(FilePickerActivity.EXTRA_START_PATH, Environment.getExternalStorageDirectory().getPath());
-
-        startActivityForResult(i, REQUEST_DEST_DIRECTORY);
     }
 
 
@@ -302,7 +264,7 @@ public class MainActivity extends FragmentActivity {
                 hideCopyButton();
 
                 if (mDestFragment.isAdded()) {
-                    mDestFragment.showProgress();
+                    mDestFragment.showProgressPanel();
                 }
 
             } else if (CopyService.ACTION_PROGRESS.equals(intent.getAction())) {
@@ -312,7 +274,7 @@ public class MainActivity extends FragmentActivity {
                     int progress = intent.getIntExtra(CopyService.RESPONSE_PROGRESS, 0);
                     int total = intent.getIntExtra(CopyService.RESPONSE_TOTAL, 0);
 
-                    mDestFragment.showProgress();
+                    mDestFragment.showProgressPanel();
                     mDestFragment.updateProgress(progress, total);
                 }
 
@@ -394,35 +356,6 @@ public class MainActivity extends FragmentActivity {
         if (device != null) {
             //mUsbManager.requestPermission(mDevice, mPermissionIntent);
             Message.success(mDestFragment.getView(), device.getDeviceName());
-        }
-    }
-
-
-    /**
-     * Gestiona la respuesta del selector de directorios
-     */
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode != Activity.RESULT_OK) {
-            return;
-        }
-
-        String path = data.getData().getPath();
-
-        switch (requestCode) {
-
-            case REQUEST_SOURCE_DIRECTORY:
-                Preferences.setSourceFolder(path);
-                mSourceFragment.changePath(path);
-                break;
-
-            case REQUEST_DEST_DIRECTORY:
-                Preferences.setDestFolder(path);
-                mDestFragment.changePath(path);
-                break;
         }
     }
 

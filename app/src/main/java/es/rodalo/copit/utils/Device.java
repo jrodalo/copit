@@ -23,8 +23,6 @@ import android.os.Environment;
 
 import java.io.File;
 
-import es.rodalo.copit.BuildConfig;
-
 /**
  * Utilidades relacionadas con el dispositivo
  */
@@ -69,13 +67,6 @@ public class Device {
      * Intenta obtener una posible carpeta de destino
      */
     public static String guessDestFolder() {
-
-        if (BuildConfig.DEBUG) {
-
-            File downloadsFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-
-            return downloadsFolder.getAbsolutePath();
-        }
 
         String[] possiblePaths = new String[]{"/storage/usbdrive", "/storage/usbdisk/"};
 

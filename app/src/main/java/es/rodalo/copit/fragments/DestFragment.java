@@ -16,17 +16,25 @@
 
 package es.rodalo.copit.fragments;
 
+import com.nononsenseapps.filepicker.FilePickerActivity;
+
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.io.File;
 
 import es.rodalo.copit.R;
+import es.rodalo.copit.utils.Preferences;
 
 /**
  * Fragmento encargado de la sección de destino
@@ -34,10 +42,17 @@ import es.rodalo.copit.R;
 public class DestFragment extends Fragment {
 
     private static final String ARG_DEST_PATH = "path";
+    private static final int REQUEST_DEST_DIRECTORY = 2;
 
     private String mPath;
-    private TextView mTextTitle;
-    private TextView mTextProgress;
+
+    private LinearLayout mSelectFolderPanel;
+
+    private LinearLayout mMainPanel;
+    private TextView mMainTitle;
+
+    private LinearLayout mProgressPanel;
+    private TextView mProgressSubtitle;
     private ProgressBar mProgressBar;
 
 
@@ -66,6 +81,7 @@ public class DestFragment extends Fragment {
         if (getArguments() != null) {
             mPath = getArguments().getString(ARG_DEST_PATH, "");
         }
+
     }
 
 
@@ -74,13 +90,41 @@ public class DestFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_dest, container, false);
 
-        mProgressBar = (ProgressBar) view.findViewById(R.id.dest_progress);
-        mTextProgress = (TextView) view.findViewById(R.id.dest_text_progress);
-        mTextTitle = (TextView) view.findViewById(R.id.dest_text_title);
+        mSelectFolderPanel = (LinearLayout) view.findViewById(R.id.dest_select_folder_panel);
+        Button mSelectFolderButton = (Button) view.findViewById(R.id.dest_select_folder_button);
+        mSelectFolderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chooseDest();
+            }
+        });
+
+        mMainPanel = (LinearLayout) view.findViewById(R.id.dest_main_panel);
+        mMainTitle = (TextView) view.findViewById(R.id.dest_main_title);
+
+        mProgressPanel = (LinearLayout) view.findViewById(R.id.dest_progress_panel);
+        mProgressBar = (ProgressBar) view.findViewById(R.id.dest_progress_bar);
+        mProgressSubtitle = (TextView) view.findViewById(R.id.dest_progress_subtitle);
 
         updateLabels();
 
         return view;
+    }
+
+
+    /**
+     * Muestra el selector de directorios para la carpeta de destino
+     */
+    public void chooseDest() {
+
+        Intent i = new Intent(getContext(), FilePickerActivity.class);
+
+        i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
+        i.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, true);
+        i.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_DIR);
+        i.putExtra(FilePickerActivity.EXTRA_START_PATH, Environment.getExternalStorageDirectory().getPath());
+
+        startActivityForResult(i, REQUEST_DEST_DIRECTORY);
     }
 
 
@@ -91,7 +135,7 @@ public class DestFragment extends Fragment {
 
         if (mPath == null || mPath.isEmpty()) {
 
-            mTextTitle.setText(getString(R.string.select_folder));
+            showSelectFolderPanel();
 
         } else {
 
@@ -99,13 +143,44 @@ public class DestFragment extends Fragment {
 
             if (directory.exists() && directory.isDirectory()) {
 
-                mTextTitle.setText(directory.getName());
+                mMainTitle.setText(directory.getName());
+                showMainPanel();
 
             } else {
 
-                mTextTitle.setText(getString(R.string.select_folder));
+                showSelectFolderPanel();
             }
         }
+    }
+
+
+    /**
+     * Muestra el panel principal
+     */
+    private void showMainPanel() {
+        mProgressPanel.setVisibility(View.GONE);
+        mMainPanel.setVisibility(View.VISIBLE);
+        mSelectFolderPanel.setVisibility(View.GONE);
+    }
+
+
+    /**
+     * Muestra el panel para seleccionar la carpeta de destino
+     */
+    private void showSelectFolderPanel() {
+        mProgressPanel.setVisibility(View.GONE);
+        mMainPanel.setVisibility(View.GONE);
+        mSelectFolderPanel.setVisibility(View.VISIBLE);
+    }
+
+
+    /**
+     * Muestra la barra de progreso
+     */
+    public void showProgressPanel() {
+        mProgressPanel.setVisibility(View.VISIBLE);
+        mMainPanel.setVisibility(View.GONE);
+        mSelectFolderPanel.setVisibility(View.GONE);
     }
 
 
@@ -118,16 +193,7 @@ public class DestFragment extends Fragment {
         total = (total > 0) ? total : 1;
 
         mProgressBar.setProgress((progress * 100) / total);
-        mTextProgress.setText(getString(R.string.copy_count, progress, total));
-    }
-
-
-    /**
-     * Muestra la barra de progreso
-     */
-    public void showProgress() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mTextProgress.setVisibility(View.VISIBLE);
+        mProgressSubtitle.setText(getString(R.string.copy_count, progress, total));
     }
 
 
@@ -136,19 +202,38 @@ public class DestFragment extends Fragment {
      */
     public void hideProgress() {
         mProgressBar.setProgress(0);
-        mProgressBar.setVisibility(View.INVISIBLE);
-        mTextProgress.setVisibility(View.INVISIBLE);
+        mProgressPanel.setVisibility(View.GONE);
+        mMainPanel.setVisibility(View.VISIBLE);
+        mSelectFolderPanel.setVisibility(View.GONE);
     }
 
 
     /**
      * Cambia la ruta asociada a este fragmento
      */
-    public void changePath(String path) {
+    private void changePath(String path) {
 
         mPath = path;
 
         updateLabels();
+    }
+
+
+    /**
+     * Gestiona la respuesta del selector de directorios
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_DEST_DIRECTORY) {
+
+            String path = data.getData().getPath();
+
+            Preferences.setDestFolder(path);
+            changePath(path);
+        }
     }
 
 }

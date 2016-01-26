@@ -6,41 +6,90 @@
         android:layout_height="match_parent"
 >
 
-    <TextView
-            android:id="@+id/dest_text_title"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:contentDescription="@string/dest"
-            android:gravity="bottom|center_horizontal"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_weight="1"
-            tools:text="Title"
-    />
-
     <LinearLayout
+            android:id="@+id/dest_main_panel"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:gravity="center"
+
     >
 
-        <ProgressBar
-                android:id="@+id/dest_progress"
+        <TextView
+                android:id="@+id/dest_main_title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textStyle="bold"
+                tools:text="Title"
+        />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+            android:id="@+id/dest_progress_panel"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:visibility="gone"
+    >
+
+        <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="invisible"
+                android:gravity="center_horizontal"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/dest_copy_inprogress"
+                android:textColor="@color/colorError"
+                android:id="@+id/textView"
+        />
+
+        <ProgressBar
+                android:id="@+id/dest_progress_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:max="100"
                 android:indeterminate="false"
                 style="?android:attr/progressBarStyleHorizontal"
         />
 
         <TextView
-                android:id="@+id/dest_text_progress"
+                android:id="@+id/dest_progress_subtitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="invisible"
                 android:gravity="center_horizontal"
                 tools:text="Progress"
+        />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+            android:id="@+id/dest_select_folder_panel"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:visibility="gone"
+    >
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="bottom|center_horizontal"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/dest_select_folder"
+        />
+
+        <Button
+                android:id="@+id/dest_select_folder_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dest_select_folder_button"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
         />
 
     </LinearLayout>

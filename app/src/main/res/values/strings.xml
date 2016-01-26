@@ -4,12 +4,16 @@
 
     <string name="ellipsis">…</string>
 
+    <string name="source_select_folder">¿Dónde están las fotos que quieres copiar?</string>
+    <string name="source_select_folder_button">Buscar fotos</string>
+
+    <string name="dest_select_folder">¿Dónde quieres guardar las fotos?</string>
+    <string name="dest_select_folder_button">Buscar una carpeta</string>
+    <string name="dest_copy_inprogress">No desconectes el pendrive todavía</string>
+
     <string name="select_folders_description">Seleccionar carpetas</string>
-    <string name="select_folder">Selecciona una carpeta</string>
     <string name="button_select_source">Seleccionar origen</string>
     <string name="button_select_dest">Seleccionar destino</string>
-    <string name="source">Origen</string>
-    <string name="dest">Destino</string>
 
     <plurals name="photos_count">
         <item quantity="one">%d foto</item>
@@ -26,7 +30,7 @@
     <string name="copy_count">%1$d de %2$d</string>
     <string name="copy_success">Copia finalizada correctamente</string>
     <string name="copy_error">Algo ha ido mal…</string>
-    <string name="copy_error_source">Debes indicar la carpeta de origen</string>
+    <string name="copy_error_source">Debes indicar la carpeta de las fotos</string>
     <string name="copy_error_dest">Debes indicar la carpeta de destino</string>
     <string name="copy_error_samefolder">Las carpetas no pueden ser la misma</string>
     <string name="copy_error_battery">Tienes poca batería</string>
