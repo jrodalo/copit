@@ -31,7 +31,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -41,6 +40,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import es.rodalo.copit.fragments.DestFragment;
 import es.rodalo.copit.fragments.SourceFragment;
 import es.rodalo.copit.services.CopyService;
@@ -55,10 +57,11 @@ public class MainActivity extends FragmentActivity {
 
     private static final float MINIMUM_BATTERY_LEVEL = 5f; // 5%
 
-    private FloatingActionButton mFabCopy;
     private SourceFragment mSourceFragment;
     private DestFragment mDestFragment;
     private Dialog mChooseFoldersDialog;
+
+    @Bind(R.id.main_fab_copy) FloatingActionButton mFabCopy;
 
 
     @Override
@@ -68,34 +71,13 @@ public class MainActivity extends FragmentActivity {
 
         setContentView(R.layout.activity_main);
 
+        ButterKnife.bind(this);
+
         firstTimeChecks();
 
         loadFragments();
 
-        mFabCopy = (FloatingActionButton) findViewById(R.id.main_fab_copy);
-
         mFabCopy.setVisibility(CopyService.isRunning() ? View.INVISIBLE : View.VISIBLE);
-
-        mFabCopy.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                startCopy();
-            }
-
-        });
-
-        Button openFolderDialogButton = (Button) findViewById(R.id.main_open_dialog);
-
-        openFolderDialogButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                openFolderDialog();
-            }
-
-        });
     }
 
 
@@ -125,12 +107,10 @@ public class MainActivity extends FragmentActivity {
     /**
      * Abre el menú inferior que permite seleccionar las carpetas de origen/destino
      */
-    private void openFolderDialog() {
+    @OnClick(R.id.main_open_dialog)
+    public void openFolderDialog() {
 
         View view = getLayoutInflater().inflate(R.layout.dialog_choose_folders, null);
-
-        TextView chooseSourceButton = (TextView) view.findViewById(R.id.text_choose_source);
-        TextView chooseDestButton = (TextView) view.findViewById(R.id.text_choose_dest);
 
         mChooseFoldersDialog = new Dialog(MainActivity.this, R.style.MaterialDialogSheet);
         mChooseFoldersDialog.setContentView(view);
@@ -138,6 +118,9 @@ public class MainActivity extends FragmentActivity {
         mChooseFoldersDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         mChooseFoldersDialog.getWindow().setGravity(Gravity.BOTTOM);
         mChooseFoldersDialog.show();
+
+        TextView chooseSourceButton = ButterKnife.findById(view, R.id.text_choose_source);
+        TextView chooseDestButton = ButterKnife.findById(view, R.id.text_choose_dest);
 
         chooseSourceButton.setOnClickListener(new View.OnClickListener() {
 
@@ -228,7 +211,8 @@ public class MainActivity extends FragmentActivity {
     /**
      * Inicia el servicio que realiza la copia entre el origen y destino
      */
-    private void startCopy() {
+    @OnClick(R.id.main_fab_copy)
+    public void startCopy() {
 
         try {
 
