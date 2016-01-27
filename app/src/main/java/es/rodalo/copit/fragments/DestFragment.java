@@ -26,13 +26,15 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.io.File;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import es.rodalo.copit.R;
 import es.rodalo.copit.utils.Preferences;
 
@@ -46,14 +48,12 @@ public class DestFragment extends Fragment {
 
     private String mPath;
 
-    private LinearLayout mSelectFolderPanel;
-
-    private LinearLayout mMainPanel;
-    private TextView mMainTitle;
-
-    private LinearLayout mProgressPanel;
-    private TextView mProgressSubtitle;
-    private ProgressBar mProgressBar;
+    @Bind(R.id.dest_select_folder_panel) LinearLayout mSelectFolderPanel;
+    @Bind(R.id.dest_main_panel) LinearLayout mMainPanel;
+    @Bind(R.id.dest_main_title) TextView mMainTitle;
+    @Bind(R.id.dest_progress_panel) LinearLayout mProgressPanel;
+    @Bind(R.id.dest_progress_bar) ProgressBar mProgressBar;
+    @Bind(R.id.dest_progress_subtitle) TextView mProgressSubtitle;
 
 
     /**
@@ -90,21 +90,7 @@ public class DestFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_dest, container, false);
 
-        mSelectFolderPanel = (LinearLayout) view.findViewById(R.id.dest_select_folder_panel);
-        Button mSelectFolderButton = (Button) view.findViewById(R.id.dest_select_folder_button);
-        mSelectFolderButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                chooseDest();
-            }
-        });
-
-        mMainPanel = (LinearLayout) view.findViewById(R.id.dest_main_panel);
-        mMainTitle = (TextView) view.findViewById(R.id.dest_main_title);
-
-        mProgressPanel = (LinearLayout) view.findViewById(R.id.dest_progress_panel);
-        mProgressBar = (ProgressBar) view.findViewById(R.id.dest_progress_bar);
-        mProgressSubtitle = (TextView) view.findViewById(R.id.dest_progress_subtitle);
+        ButterKnife.bind(this, view);
 
         updateLabels();
 
@@ -112,9 +98,17 @@ public class DestFragment extends Fragment {
     }
 
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
+
+
     /**
      * Muestra el selector de directorios para la carpeta de destino
      */
+    @OnClick(R.id.dest_select_folder_button)
     public void chooseDest() {
 
         Intent i = new Intent(getContext(), FilePickerActivity.class);

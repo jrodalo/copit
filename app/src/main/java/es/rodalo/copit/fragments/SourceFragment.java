@@ -32,7 +32,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -44,6 +43,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import es.rodalo.copit.R;
 import es.rodalo.copit.utils.Preferences;
 import es.rodalo.copit.views.adapters.ImageAdapter;
@@ -59,12 +61,13 @@ public class SourceFragment extends Fragment {
     private static final String[] imageExtensions = new String[]{"jpg", "jpeg", "png", "gif", "bmp"};
     private static final String[] videoExtensions = new String[]{"avi", "mpg", "mpeg", "mov"};
 
-    private LinearLayout mSelectFolderPanel;
-    private RelativeLayout mMainPanel;
-    private TextView mTextTitle;
-    private TextView mTextSubtitle;
-    private GridView mGridPhotos;
     private String mPath;
+
+    @Bind(R.id.source_select_folder_panel) LinearLayout mSelectFolderPanel;
+    @Bind(R.id.source_grid_panel) RelativeLayout mMainPanel;
+    @Bind(R.id.source_text_title) TextView mTextTitle;
+    @Bind(R.id.source_text_subtitle) TextView mTextSubtitle;
+    @Bind(R.id.source_grid_photos) GridView mGridPhotos;
 
 
     /**
@@ -100,20 +103,7 @@ public class SourceFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_source, container, false);
 
-        mSelectFolderPanel = (LinearLayout) view.findViewById(R.id.source_select_folder_panel);
-        Button mSelectFolderButton = (Button) view.findViewById(R.id.source_select_folder_button);
-        mSelectFolderButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                chooseSource();
-            }
-        });
-
-
-        mMainPanel = (RelativeLayout) view.findViewById(R.id.source_grid_panel);
-        mTextTitle = (TextView) view.findViewById(R.id.source_text_title);
-        mTextSubtitle = (TextView) view.findViewById(R.id.source_text_subtitle);
-        mGridPhotos = (GridView) view.findViewById(R.id.source_grid_photos);
+        ButterKnife.bind(this, view);
 
         updateLabels();
 
@@ -123,9 +113,17 @@ public class SourceFragment extends Fragment {
     }
 
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
+
+
     /**
      * Muestra el selector de directorios para la carpeta de origen
      */
+    @OnClick(R.id.source_select_folder_button)
     public void chooseSource() {
 
         Intent i = new Intent(getContext(), FilePickerActivity.class);
