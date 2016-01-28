@@ -105,17 +105,23 @@ public class SourceFragment extends Fragment {
 
         ButterKnife.bind(this, view);
 
-        updateLabels();
-
-        loadPhotos();
-
         return view;
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        updateLabels();
+        loadPhotos();
     }
 
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+
         ButterKnife.unbind(this);
     }
 
@@ -246,19 +252,6 @@ public class SourceFragment extends Fragment {
 
 
     /**
-     * Cambia la ruta asociada a este fragmento
-     */
-    private void changePath(String path) {
-
-        mPath = path;
-
-        updateLabels();
-
-        loadPhotos();
-    }
-
-
-    /**
      * Gestiona la respuesta del selector de directorios
      */
     @Override
@@ -268,10 +261,9 @@ public class SourceFragment extends Fragment {
 
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_SOURCE_DIRECTORY) {
 
-            String path = data.getData().getPath();
+            mPath = data.getData().getPath();
 
-            Preferences.setSourceFolder(path);
-            changePath(path);
+            Preferences.setSourceFolder(mPath);
         }
     }
 }

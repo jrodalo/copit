@@ -92,9 +92,14 @@ public class DestFragment extends Fragment {
 
         ButterKnife.bind(this, view);
 
-        updateLabels();
-
         return view;
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateLabels();
     }
 
 
@@ -203,17 +208,6 @@ public class DestFragment extends Fragment {
 
 
     /**
-     * Cambia la ruta asociada a este fragmento
-     */
-    private void changePath(String path) {
-
-        mPath = path;
-
-        updateLabels();
-    }
-
-
-    /**
      * Gestiona la respuesta del selector de directorios
      */
     @Override
@@ -223,10 +217,9 @@ public class DestFragment extends Fragment {
 
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_DEST_DIRECTORY) {
 
-            String path = data.getData().getPath();
+            mPath = data.getData().getPath();
 
-            Preferences.setDestFolder(path);
-            changePath(path);
+            Preferences.setDestFolder(mPath);
         }
     }
 
