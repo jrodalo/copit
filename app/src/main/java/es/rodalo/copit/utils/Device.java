@@ -68,7 +68,7 @@ public class Device {
      */
     public static String guessDestFolder() {
 
-        String[] possiblePaths = new String[]{"/storage/usbdrive", "/storage/usbdisk/"};
+        String[] possiblePaths = new String[]{"/storage/usbdisk/", "/storage/usbdrive"};
 
         for (String path : possiblePaths) {
 

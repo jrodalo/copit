@@ -221,7 +221,7 @@ public class MainActivity extends FragmentActivity {
 
             if (canExecuteCopy(source, dest)) {
 
-                File backup = new File(dest, getBackupFolderName());
+                File backup = new File(dest, getBackupFolderName(source));
 
                 Intent intent = new Intent(this, CopyService.class);
                 intent.putExtra(CopyService.PARAM_SOURCE, source);
@@ -314,13 +314,13 @@ public class MainActivity extends FragmentActivity {
     /**
      * Obtiene el nombre de la carpeta donde se guardarán los archivos copiados
      */
-    private String getBackupFolderName() {
+    private String getBackupFolderName(File source) {
 
         String appId = BuildConfig.APPLICATION_ID;
 
         String appName = appId.substring(appId.lastIndexOf(".") + 1, appId.length());
 
-        return appName.toLowerCase() + "_backup/" + new SimpleDateFormat("ddMMyyyy", Locale.US).format(new Date());
+        return appName.toLowerCase() + "_backup/" + source.getName();
     }
 
 
