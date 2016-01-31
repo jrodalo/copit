@@ -21,8 +21,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.hardware.usb.UsbDevice;
-import android.hardware.usb.UsbManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -36,9 +34,6 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -99,8 +94,6 @@ public class MainActivity extends FragmentActivity {
         filter.addAction(CopyService.ACTION_END);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(onCopyEvent, filter);
-
-        checkUsb();
     }
 
 
@@ -321,26 +314,6 @@ public class MainActivity extends FragmentActivity {
         String appName = appId.substring(appId.lastIndexOf(".") + 1, appId.length());
 
         return appName.toLowerCase() + "_backup/" + source.getName();
-    }
-
-
-    /**
-     * Prueba para intentar obtener el nombre del pendrive
-     */
-    private void checkUsb() {
-
-        Intent intent = getIntent();
-
-        if (intent == null || !UsbManager.ACTION_USB_DEVICE_ATTACHED.equals(intent.getAction())) {
-            return;
-        }
-
-        UsbDevice device = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
-
-        if (device != null) {
-            //mUsbManager.requestPermission(mDevice, mPermissionIntent);
-            Message.success(mDestFragment.getView(), device.getDeviceName());
-        }
     }
 
 }
