@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Copit</string>
+    <string name="button_select_dest">Select destination</string>
+    <string name="button_select_source">Select source</string>
+    <string name="copy_count">%1$d of %2$d</string>
+    <string name="copy_error">Something gone wrong…</string>
+    <string name="copy_error_battery">Low battery</string>
+    <string name="copy_error_dest">You should select the destination folder</string>
+    <string name="copy_error_samefolder">Both folders can\'t be the same</string>
+    <string name="copy_error_source">You should select the photos folder</string>
+    <string name="copy_success">Copy finished successfully</string>
+    <string name="dest_copy_inprogress">Don\'t unplug the USB key yet</string>
+    <string name="dest_select_folder">Where do you want to save the photos?</string>
+    <string name="dest_select_folder_button">Search folder</string>
+    <string name="file_count">(%1$s and %2$s)</string>
+    <string name="select_folders_description">Select folders</string>
+    <string name="source_select_folder">Where are the photos you want to copy?</string>
+    <string name="source_select_folder_button">Search photos</string>
+
+    <string name="nnf_new_folder">New folder</string>
+    <string name="nnf_create_folder_error">Failed to create folder</string>
+    <string name="nnf_name">Name</string>
+    <string name="nnf_select_something_first">Please select something first</string>
+    <string name="nnf_permission_external_write_denied">Permisson to access filesystem denied</string>
+
+    <plurals name="photos_count">
+        <item quantity="one">%d photo</item>
+        <item quantity="other">%d photos</item>
+    </plurals>
+
+    <plurals name="videos_count">
+        <item quantity="one">%d video</item>
+        <item quantity="other">%d videos</item>
+    </plurals>
+
+</resources>

@@ -1,32 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <string name="app_name">Copit</string>
-
-    <string name="ellipsis">…</string>
-
+    <string name="ellipsis" translatable="false">…</string>
     <string name="source_select_folder">¿Dónde están las fotos que quieres copiar?</string>
     <string name="source_select_folder_button">Buscar fotos</string>
-
     <string name="dest_select_folder">¿Dónde quieres guardar las fotos?</string>
     <string name="dest_select_folder_button">Buscar una carpeta</string>
     <string name="dest_copy_inprogress">No desconectes el pendrive todavía</string>
-
     <string name="select_folders_description">Seleccionar carpetas</string>
     <string name="button_select_source">Seleccionar origen</string>
     <string name="button_select_dest">Seleccionar destino</string>
-
-    <plurals name="photos_count">
-        <item quantity="one">%d foto</item>
-        <item quantity="other">%d fotos</item>
-    </plurals>
-
-    <plurals name="videos_count">
-        <item quantity="one">%d video</item>
-        <item quantity="other">%d videos</item>
-    </plurals>
-
     <string name="file_count">(%1$s y %2$s)</string>
-
     <string name="copy_count">%1$d de %2$d</string>
     <string name="copy_success">Copia finalizada correctamente</string>
     <string name="copy_error">Algo ha ido mal…</string>
@@ -40,5 +25,15 @@
     <string name="nnf_name">Nombre</string>
     <string name="nnf_select_something_first">Selecciona al menos un archivo</string>
     <string name="nnf_permission_external_write_denied">No tengo permiso para escribir</string>
+
+    <plurals name="photos_count">
+        <item quantity="one">%d foto</item>
+        <item quantity="other">%d fotos</item>
+    </plurals>
+
+    <plurals name="videos_count">
+        <item quantity="one">%d video</item>
+        <item quantity="other">%d videos</item>
+    </plurals>
 
 </resources>
