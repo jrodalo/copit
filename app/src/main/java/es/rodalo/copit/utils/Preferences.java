@@ -19,6 +19,8 @@ package es.rodalo.copit.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.Date;
+
 import es.rodalo.copit.BuildConfig;
 
 /**
@@ -30,6 +32,7 @@ public class Preferences {
     private static final String PREF_SOURCE_DIRECTORY = "sourceDir";
     private static final String PREF_DEST_DIRECTORY = "destDir";
     private static final String PREF_FIRST_TIME = "firtTime";
+    private static final String PREF_LAST_TIME = "lastTime";
 
     private static SharedPreferences getSharedPreferences() {
         Context ctx = ApplicationContext.getAppContext();
@@ -95,6 +98,27 @@ public class Preferences {
         SharedPreferences.Editor editor = getSharedPreferences().edit();
 
         editor.putBoolean(PREF_FIRST_TIME, first);
+
+        editor.apply();
+    }
+
+
+    /**
+     * Obtiene la fecha de la última copia correcta
+     */
+    public static long getLastTime() {
+        return getSharedPreferences().getLong(PREF_LAST_TIME, 0);
+    }
+
+
+    /**
+     * Establece la fecha de la última copia correcta
+     */
+    public static void setLastTime(Date time) {
+
+        SharedPreferences.Editor  editor = getSharedPreferences().edit();
+
+        editor.putLong(PREF_LAST_TIME, time.getTime());
 
         editor.apply();
     }

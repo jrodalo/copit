@@ -34,6 +34,7 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -259,14 +260,16 @@ public class MainActivity extends FragmentActivity {
 
                 boolean result = intent.getBooleanExtra(CopyService.RESPONSE_RESULT, false);
 
-                if (mDestFragment.isAdded()) {
-                    mDestFragment.hideProgress();
-                }
-
                 if (result) {
                     Message.success(mDestFragment.getView(), getString(R.string.copy_success));
+                    Preferences.setLastTime(new Date());
                 } else {
                     Message.error(mDestFragment.getView(), getString(R.string.copy_error));
+                }
+
+                if (mDestFragment.isAdded()) {
+                    mDestFragment.hideProgress();
+                    mDestFragment.updateLabels();
                 }
 
                 // Necesario para evitar un problema cuando el servicio termina muy rápido

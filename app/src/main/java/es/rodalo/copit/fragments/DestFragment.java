@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +52,7 @@ public class DestFragment extends Fragment {
     @Bind(R.id.dest_select_folder_panel) LinearLayout mSelectFolderPanel;
     @Bind(R.id.dest_main_panel) LinearLayout mMainPanel;
     @Bind(R.id.dest_main_title) TextView mMainTitle;
+    @Bind(R.id.dest_main_subtitle) TextView mMainSubtitle;
     @Bind(R.id.dest_progress_panel) LinearLayout mProgressPanel;
     @Bind(R.id.dest_progress_bar) ProgressBar mProgressBar;
     @Bind(R.id.dest_progress_subtitle) TextView mProgressSubtitle;
@@ -130,7 +132,7 @@ public class DestFragment extends Fragment {
     /**
      * Muestra el nombre de la carpeta de destino o un aviso si no existe
      */
-    private void updateLabels() {
+    public void updateLabels() {
 
         if (mPath == null || mPath.isEmpty()) {
 
@@ -143,6 +145,15 @@ public class DestFragment extends Fragment {
             if (directory.exists() && directory.isDirectory()) {
 
                 mMainTitle.setText(directory.getName());
+
+                long lastTime = Preferences.getLastTime();
+                long now = System.currentTimeMillis();
+
+                if (lastTime > 0) {
+                    mMainSubtitle.setVisibility(now - lastTime > DateUtils.MINUTE_IN_MILLIS ? View.VISIBLE : View.GONE);
+                    mMainSubtitle.setText(DateUtils.getRelativeTimeSpanString(lastTime, now, DateUtils.SECOND_IN_MILLIS, 0));
+                }
+
                 showMainPanel();
 
             } else {
