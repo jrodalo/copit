@@ -194,11 +194,38 @@ public class MainActivity extends FragmentActivity {
             throw new IOException(getString(R.string.copy_error_samefolder));
         }
 
+        if (isChild(dest, source)) {
+            throw new IOException(getString(R.string.copy_error_samefolder));
+        }
+
         if (Device.getBatteryLevel() < MINIMUM_BATTERY_LEVEL) {
             throw new IOException(getString(R.string.copy_error_battery));
         }
 
         return true;
+    }
+
+
+    private boolean isChild(File maybeChild, File possibleParent) throws IOException {
+
+        final File parent = possibleParent.getCanonicalFile();
+
+        if (!parent.exists() || !parent.isDirectory()) {
+            return false;
+        }
+
+        File child = maybeChild.getCanonicalFile();
+
+        while (child != null) {
+
+            if (child.equals(parent)) {
+                return true;
+            }
+
+            child = child.getParentFile();
+        }
+
+        return false;
     }
 
 

@@ -53,5 +53,20 @@ public class CopyUnitTest {
         assertThat(activity.canExecuteCopy(source, source), is(false));
     }
 
+
+
+    @Test(expected = IOException.class)
+    public void should_throw_exception_when_one_folder_contains_the_other() throws Exception {
+
+        MainActivity activity = new MainActivity();
+
+        File source = tempFolder.newFolder("test-source");
+        File dest = new File(source, "test-dest");
+
+        dest.mkdir();
+
+        assertThat(activity.canExecuteCopy(source, dest), is(false));
+    }
+
 }
 
