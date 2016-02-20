@@ -16,9 +16,6 @@
 
 package es.rodalo.copit.services;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.FalseFileFilter;
-import org.apache.commons.io.filefilter.FileFileFilter;
 
 import android.app.ActivityManager;
 import android.app.IntentService;
@@ -27,16 +24,15 @@ import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.Collection;
 
 import es.rodalo.copit.utils.ApplicationContext;
+import es.rodalo.copit.utils.Files;
 
 
 /**
  * Servicio encargado de realizar la copia de archivos
  */
-public class CopyService extends IntentService {
+public class CopyService extends IntentService implements Files.CopyProgressCallback {
 
     public static final String ACTION_START = "es.rodalo.copit.intent.copy.start";
     public static final String ACTION_PROGRESS = "es.rodalo.copit.intent.copy.progress";
@@ -68,42 +64,13 @@ public class CopyService extends IntentService {
             File source = (File) intent.getExtras().get(PARAM_SOURCE);
             File dest = (File) intent.getExtras().get(PARAM_DEST);
 
-            copyFiles(source, dest);
+            Files.copyFolder(source, dest, this);
 
             onEnd(true);
 
         } catch (Exception e) {
 
             onEnd(false);
-        }
-    }
-
-
-    /**
-     * Copia archivos entre las carpetas indicadas
-     */
-    private void copyFiles(File from, File to) throws IOException {
-
-        if (!to.exists() && !to.mkdirs()) {
-            throw new IOException("Can't create backup folder :(");
-        }
-
-        Collection<File> files = FileUtils.listFiles(from, FileFileFilter.FILE, FalseFileFilter.FALSE);
-
-        int count = 0;
-        int total = files.size();
-
-        for (File file : files) {
-
-            if (file.isDirectory() || !file.canRead()) {
-                continue;
-            }
-
-            FileUtils.copyFileToDirectory(file, to, true);
-
-            count += 1;
-
-            onProgress(count, total);
         }
     }
 
@@ -119,7 +86,8 @@ public class CopyService extends IntentService {
     /**
      * Notifica el progreso actual del proceso de copia
      */
-    private void onProgress(int progress, int total) {
+    @Override
+    public void onProgress(int progress, int total) {
         Intent intent = new Intent(ACTION_PROGRESS);
         intent.putExtra(RESPONSE_PROGRESS, progress);
         intent.putExtra(RESPONSE_TOTAL, total);
