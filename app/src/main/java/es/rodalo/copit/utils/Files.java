@@ -50,18 +50,18 @@ public class Files {
      * Copia archivos entre las carpetas indicadas realizando
      * algunas validaciones para comprobar si es posible
      */
-    public static boolean copyFolder(File srcDir, File destDir, CopyProgressCallback callback) throws Exception {
+    public static void copyFolder(File srcDir, File destDir, CopyProgressCallback callback) throws Exception {
 
         validateCopy(srcDir, destDir);
 
-        return doCopyFolder(srcDir, destDir, callback);
+        doCopyFolder(srcDir, destDir, callback);
     }
 
 
     /**
      * Copia archivos entre las carpetas indicadas
      */
-    private static boolean doCopyFolder(File srcDir, File destDir, CopyProgressCallback callback) throws Exception {
+    private static void doCopyFolder(File srcDir, File destDir, CopyProgressCallback callback) throws Exception {
 
         File[] srcFiles = srcDir.listFiles();
 
@@ -89,8 +89,6 @@ public class Files {
                 callback.onProgress(count, total);
             }
         }
-
-        return true;
     }
 
 
@@ -128,7 +126,7 @@ public class Files {
     /**
      * Comprueba si un directorio es hijo de otro
      */
-    public static boolean isChild(File maybeChild, File possibleParent) throws IOException {
+    private static boolean isChild(File maybeChild, File possibleParent) throws IOException {
 
         final File parent = possibleParent.getCanonicalFile();
 
