@@ -33,7 +33,7 @@ public class CopyUnitTest {
     }
 
 
-    @Test(expected = Error.DestDontExists.class)
+    @Test(expected = Error.NoDestinationException.class)
     public void should_throw_exception_when_dest_folder_doesnt_exists() throws Exception {
 
         File source = tempFolder.newFolder("test-source");

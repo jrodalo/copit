@@ -131,7 +131,7 @@ public class CopyService extends IntentService implements Files.CopyProgressCall
 
 
     /**
-     * Obtiene el nombre de la carpeta donde se guardarán los archivos copiados
+     * Crea la carpeta donde se guardarán los archivos copiados
      */
     private File createBackupFolder(File source, File dest) throws Error.CantCreateBackupFolderException {
 
