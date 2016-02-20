@@ -25,7 +25,9 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import java.io.File;
 
+import es.rodalo.copit.BuildConfig;
 import es.rodalo.copit.utils.ApplicationContext;
+import es.rodalo.copit.utils.Error;
 import es.rodalo.copit.utils.Files;
 
 
@@ -37,6 +39,7 @@ public class CopyService extends IntentService implements Files.CopyProgressCall
     public static final String ACTION_START = "es.rodalo.copit.intent.copy.start";
     public static final String ACTION_PROGRESS = "es.rodalo.copit.intent.copy.progress";
     public static final String ACTION_END = "es.rodalo.copit.intent.copy.end";
+    public static final String ACTION_ERROR = "es.rodalo.copit.intent.copy.error";
 
     public static final String PARAM_SOURCE = "source";
     public static final String PARAM_DEST = "dest";
@@ -44,6 +47,7 @@ public class CopyService extends IntentService implements Files.CopyProgressCall
     public static final String RESPONSE_PROGRESS = "progress";
     public static final String RESPONSE_TOTAL = "total";
     public static final String RESPONSE_RESULT = "result";
+    public static final String RESPONSE_ERROR = "error";
 
 
     public CopyService() {
@@ -63,13 +67,15 @@ public class CopyService extends IntentService implements Files.CopyProgressCall
 
             File source = (File) intent.getExtras().get(PARAM_SOURCE);
             File dest = (File) intent.getExtras().get(PARAM_DEST);
+            File backup = createBackupFolder(source, dest);
 
-            Files.copyFolder(source, dest, this);
+            Files.copyFolder(source, backup, this);
 
             onEnd(true);
 
         } catch (Exception e) {
 
+            onError(e);
             onEnd(false);
         }
     }
@@ -106,10 +112,41 @@ public class CopyService extends IntentService implements Files.CopyProgressCall
 
 
     /**
+     * Notifica un error durante el proceso de copia
+     */
+    private void onError(Exception exception) {
+        Intent intent = new Intent(ACTION_ERROR);
+        intent.putExtra(RESPONSE_ERROR, exception);
+        publish(intent);
+    }
+
+
+    /**
      * Publica el intent indicado para que lo pueda recuperar la clase principal
      */
     private void publish(Intent intent) {
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
+
+    /**
+     * Obtiene el nombre de la carpeta donde se guardarán los archivos copiados
+     */
+    private File createBackupFolder(File source, File dest) throws Error.CantCreateBackupFolder {
+
+        String appId = BuildConfig.APPLICATION_ID;
+
+        String appName = appId.substring(appId.lastIndexOf(".") + 1, appId.length());
+
+        String folderName = appName.toLowerCase() + "_backup/" + source.getName();
+
+        File backupFolder = new File(dest, folderName);
+
+        if ( ! backupFolder.exists() && ! backupFolder.mkdirs()) {
+            throw new Error.CantCreateBackupFolder();
+        }
+
+        return backupFolder;
     }
 
 

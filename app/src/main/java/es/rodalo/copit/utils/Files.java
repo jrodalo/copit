@@ -47,9 +47,21 @@ public class Files {
 
 
     /**
+     * Copia archivos entre las carpetas indicadas realizando
+     * algunas validaciones para comprobar si es posible
+     */
+    public static boolean copyFolder(File srcDir, File destDir, CopyProgressCallback callback) throws Exception {
+
+        validateCopy(srcDir, destDir);
+
+        return doCopyFolder(srcDir, destDir, callback);
+    }
+
+
+    /**
      * Copia archivos entre las carpetas indicadas
      */
-    public static void copyFolder(File srcDir, File destDir, CopyProgressCallback callback) throws IOException {
+    private static boolean doCopyFolder(File srcDir, File destDir, CopyProgressCallback callback) throws Exception {
 
         File[] srcFiles = srcDir.listFiles();
 
@@ -62,12 +74,12 @@ public class Files {
 
             if (srcFile.isDirectory()) {
 
-                copyFolder(srcFile, destFile, callback);
+                doCopyFolder(srcFile, destFile, callback);
 
             } else {
 
                 if (isNotTheSameFile(srcFile, destFile)) {
-                     FileUtils.copyFile(srcFile, destFile, true);
+                    FileUtils.copyFile(srcFile, destFile, true);
                 }
             }
 
@@ -77,6 +89,65 @@ public class Files {
                 callback.onProgress(count, total);
             }
         }
+
+        return true;
+    }
+
+
+    /**
+     * Comprueba si es posible ejecutar la copia de archivos entre el origen y destino
+     */
+    private static void validateCopy(File source, File dest) throws Exception {
+
+        if (!source.exists() || !source.isDirectory()) {
+            throw new Error.SourceDontExists();
+        }
+
+        if (!dest.exists()) {
+            throw new Error.DestDontExists();
+        }
+
+        if (!dest.isDirectory()) {
+            throw new Error.DestDontExists();
+        }
+
+        if (!dest.canWrite()) {
+            throw new Error.DestDontExists();
+        }
+
+        if (source.equals(dest)) {
+            throw new Error.SameDirectoryException();
+        }
+
+        if (isChild(dest, source)) {
+            throw new Error.IsChildException();
+        }
+    }
+
+
+    /**
+     * Comprueba si un directorio es hijo de otro
+     */
+    public static boolean isChild(File maybeChild, File possibleParent) throws IOException {
+
+        final File parent = possibleParent.getCanonicalFile();
+
+        if (!parent.exists() || !parent.isDirectory()) {
+            return false;
+        }
+
+        File child = maybeChild.getCanonicalFile();
+
+        while (child != null) {
+
+            if (child.equals(parent)) {
+                return true;
+            }
+
+            child = child.getParentFile();
+        }
+
+        return false;
     }
 
 

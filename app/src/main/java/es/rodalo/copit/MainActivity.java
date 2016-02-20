@@ -33,7 +33,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Date;
 
 import butterknife.Bind;
@@ -43,6 +42,7 @@ import es.rodalo.copit.fragments.DestFragment;
 import es.rodalo.copit.fragments.SourceFragment;
 import es.rodalo.copit.services.CopyService;
 import es.rodalo.copit.utils.Device;
+import es.rodalo.copit.utils.Error;
 import es.rodalo.copit.utils.Message;
 import es.rodalo.copit.utils.Preferences;
 
@@ -93,6 +93,7 @@ public class MainActivity extends FragmentActivity {
         filter.addAction(CopyService.ACTION_START);
         filter.addAction(CopyService.ACTION_PROGRESS);
         filter.addAction(CopyService.ACTION_END);
+        filter.addAction(CopyService.ACTION_ERROR);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(onCopyEvent, filter);
     }
@@ -178,58 +179,6 @@ public class MainActivity extends FragmentActivity {
 
 
     /**
-     * Comprueba si es posible ejecutar la copia de archivos entre el origen y destino
-     */
-    public boolean canExecuteCopy(File source, File dest) throws IOException {
-
-        if (!source.exists() || !source.isDirectory()) {
-            throw new IOException(getString(R.string.copy_error_source));
-        }
-
-        if (!dest.exists() || !dest.isDirectory() || !dest.canWrite()) {
-            throw new IOException(getString(R.string.copy_error_dest));
-        }
-
-        if (source.equals(dest)) {
-            throw new IOException(getString(R.string.copy_error_samefolder));
-        }
-
-        if (isChild(dest, source)) {
-            throw new IOException(getString(R.string.copy_error_samefolder));
-        }
-
-        if (Device.getBatteryLevel() < MINIMUM_BATTERY_LEVEL) {
-            throw new IOException(getString(R.string.copy_error_battery));
-        }
-
-        return true;
-    }
-
-
-    private boolean isChild(File maybeChild, File possibleParent) throws IOException {
-
-        final File parent = possibleParent.getCanonicalFile();
-
-        if (!parent.exists() || !parent.isDirectory()) {
-            return false;
-        }
-
-        File child = maybeChild.getCanonicalFile();
-
-        while (child != null) {
-
-            if (child.equals(parent)) {
-                return true;
-            }
-
-            child = child.getParentFile();
-        }
-
-        return false;
-    }
-
-
-    /**
      * Inicia el servicio que realiza la copia entre el origen y destino
      */
     @OnClick(R.id.main_fab_copy)
@@ -240,17 +189,12 @@ public class MainActivity extends FragmentActivity {
             File source = new File(Preferences.getSourceFolder());
             File dest = new File(Preferences.getDestFolder());
 
-            if (canExecuteCopy(source, dest)) {
+            Intent intent = new Intent(this, CopyService.class);
+            intent.putExtra(CopyService.PARAM_SOURCE, source);
+            intent.putExtra(CopyService.PARAM_DEST, dest);
+            startService(intent);
 
-                File backup = new File(dest, getBackupFolderName(source));
-
-                Intent intent = new Intent(this, CopyService.class);
-                intent.putExtra(CopyService.PARAM_SOURCE, source);
-                intent.putExtra(CopyService.PARAM_DEST, backup);
-                startService(intent);
-            }
-
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             Message.error(mDestFragment.getView(), ex.getMessage());
         }
     }
@@ -264,47 +208,66 @@ public class MainActivity extends FragmentActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            if (CopyService.ACTION_START.equals(intent.getAction())) {
 
-                hideCopyButton();
+            switch (intent.getAction()) {
 
-                if (mDestFragment.isAdded()) {
-                    mDestFragment.showProgressPanel();
-                }
+                case CopyService.ACTION_START:
 
-            } else if (CopyService.ACTION_PROGRESS.equals(intent.getAction())) {
+                    hideCopyButton();
 
-                if (mDestFragment.isAdded()) {
-
-                    int progress = intent.getIntExtra(CopyService.RESPONSE_PROGRESS, 0);
-                    int total = intent.getIntExtra(CopyService.RESPONSE_TOTAL, 0);
-
-                    mDestFragment.showProgressPanel();
-                    mDestFragment.updateProgress(progress, total);
-                }
-
-            } else if (CopyService.ACTION_END.equals(intent.getAction())) {
-
-                boolean result = intent.getBooleanExtra(CopyService.RESPONSE_RESULT, false);
-
-                if (result) {
-                    Message.success(mDestFragment.getView(), getString(R.string.copy_success));
-                    Preferences.setLastTime(new Date());
-                } else {
-                    Message.error(mDestFragment.getView(), getString(R.string.copy_error));
-                }
-
-                if (mDestFragment.isAdded()) {
-                    mDestFragment.hideProgress();
-                    mDestFragment.updateLabels();
-                }
-
-                // Necesario para evitar un problema cuando el servicio termina muy rápido
-                new Handler().postDelayed(new Runnable() {
-                    public void run() {
-                        showCopyButton();
+                    if (mDestFragment.isAdded()) {
+                        mDestFragment.showProgressPanel();
                     }
-                }, 500);
+
+                    break;
+
+                case CopyService.ACTION_PROGRESS:
+
+                    if (mDestFragment.isAdded()) {
+
+                        int progress = intent.getIntExtra(CopyService.RESPONSE_PROGRESS, 0);
+                        int total = intent.getIntExtra(CopyService.RESPONSE_TOTAL, 0);
+
+                        mDestFragment.showProgressPanel();
+                        mDestFragment.updateProgress(progress, total);
+                    }
+
+                    break;
+
+                case CopyService.ACTION_END:
+
+                    boolean result = intent.getBooleanExtra(CopyService.RESPONSE_RESULT, false);
+
+                    if (result) {
+                        Message.success(mDestFragment.getView(), getString(R.string.copy_success));
+                        Preferences.setLastTime(new Date());
+                    }
+
+                    if (mDestFragment.isAdded()) {
+                        mDestFragment.hideProgress();
+                        mDestFragment.updateLabels();
+                    }
+
+                    // Necesario para evitar un problema cuando el servicio termina muy rápido
+                    new Handler().postDelayed(new Runnable() {
+                        public void run() {
+                            showCopyButton();
+                        }
+                    }, 500);
+
+                    break;
+
+                case CopyService.ACTION_ERROR:
+
+                    Exception exception = (Exception) intent.getSerializableExtra(CopyService.RESPONSE_ERROR);
+
+                    String message = (exception instanceof Error.AppError) ?
+                            getString(((Error.AppError) exception).getMessageKey()) :
+                            getString(R.string.copy_error);
+
+                    Message.error(mDestFragment.getView(), message);
+
+                    break;
             }
         }
     };
@@ -334,16 +297,6 @@ public class MainActivity extends FragmentActivity {
     }
 
 
-    /**
-     * Obtiene el nombre de la carpeta donde se guardarán los archivos copiados
-     */
-    private String getBackupFolderName(File source) {
 
-        String appId = BuildConfig.APPLICATION_ID;
-
-        String appName = appId.substring(appId.lastIndexOf(".") + 1, appId.length());
-
-        return appName.toLowerCase() + "_backup/" + source.getName();
-    }
 
 }

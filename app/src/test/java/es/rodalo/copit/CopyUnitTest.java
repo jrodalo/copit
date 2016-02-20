@@ -4,14 +4,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import android.text.format.DateUtils;
-
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.List;
 
+import es.rodalo.copit.utils.Error;
 import es.rodalo.copit.utils.Files;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -26,57 +23,50 @@ public class CopyUnitTest {
     public final TemporaryFolder tempFolder = new TemporaryFolder();
 
 
-    @Test(expected = IOException.class)
+    @Test(expected = Error.SourceDontExists.class)
     public void should_throw_exception_when_source_folder_doesnt_exists() throws Exception {
-
-        MainActivity activity = new MainActivity();
 
         File source = new File("random_source_folder");
         File dest = tempFolder.newFolder("test-dest");
 
-        assertThat(activity.canExecuteCopy(source, dest), is(false));
+        Files.copyFolder(source, dest, null);
     }
 
 
-    @Test(expected = IOException.class)
+    @Test(expected = Error.DestDontExists.class)
     public void should_throw_exception_when_dest_folder_doesnt_exists() throws Exception {
-
-        MainActivity activity = new MainActivity();
 
         File source = tempFolder.newFolder("test-source");
         File dest = new File("random_dest_folder");
 
-        assertThat(activity.canExecuteCopy(source, dest), is(false));
+        Files.copyFolder(source, dest, null);
     }
 
 
-    @Test(expected = IOException.class)
+    @Test(expected = Error.SameDirectoryException.class)
     public void should_throw_exception_when_both_folders_are_the_same() throws Exception {
-
-        MainActivity activity = new MainActivity();
 
         File source = tempFolder.newFolder("test-source");
 
-        assertThat(activity.canExecuteCopy(source, source), is(false));
+        Files.copyFolder(source, source, null);
     }
 
 
 
-    @Test(expected = IOException.class)
+    @Test(expected = Error.IsChildException.class)
     public void should_throw_exception_when_one_folder_contains_the_other() throws Exception {
-
-        MainActivity activity = new MainActivity();
 
         File source = tempFolder.newFolder("test-source");
         File dest = new File(source, "test-dest");
 
         assertThat(dest.mkdir(), is(true));
-        assertThat(activity.canExecuteCopy(source, dest), is(false));
+
+        Files.copyFolder(source, dest, null);
     }
 
 
     @Test
-    public void should_copy_files_to_correct_destination() throws IOException {
+    public void should_copy_files_to_correct_destination() throws Exception {
 
         File source = tempFolder.newFolder("test-source");
         File dest = tempFolder.newFolder("test-dest");
@@ -96,7 +86,7 @@ public class CopyUnitTest {
 
 
     @Test
-    public void should_retain_last_modified_dates() throws IOException {
+    public void should_retain_last_modified_dates() throws Exception {
 
         File source = tempFolder.newFolder("test-source");
         File dest = tempFolder.newFolder("test-dest");
