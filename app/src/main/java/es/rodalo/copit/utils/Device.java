@@ -16,10 +16,13 @@
 
 package es.rodalo.copit.utils;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
 import android.os.Environment;
+import android.provider.Settings;
 
 import java.io.File;
 
@@ -43,6 +46,31 @@ public class Device {
         int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
 
         return ((float) level / (float) scale) * 100.0f;
+    }
+
+
+    /**
+     * Obtiene un identificador del usuario. Puede ser o bien el nombre de su cuenta de google
+     * o bien el identificador de su dispositivo
+     */
+    public static String getUserId() {
+
+        String id = null;
+
+        Account[] accounts = AccountManager.get(ApplicationContext.getAppContext()).getAccounts();
+
+        for (Account account : accounts) {
+            if (account.type.equalsIgnoreCase("com.google")) {
+                id = account.name;
+                break;
+            }
+        }
+
+        if (id == null) {
+            id = Settings.Secure.getString(ApplicationContext.getAppContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        }
+
+        return id;
     }
 
 

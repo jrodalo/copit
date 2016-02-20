@@ -27,6 +27,7 @@ import java.io.File;
 
 import es.rodalo.copit.BuildConfig;
 import es.rodalo.copit.utils.ApplicationContext;
+import es.rodalo.copit.utils.Device;
 import es.rodalo.copit.utils.Error;
 import es.rodalo.copit.utils.Files;
 
@@ -136,9 +137,13 @@ public class CopyService extends IntentService implements Files.CopyProgressCall
 
         String appId = BuildConfig.APPLICATION_ID;
 
-        String appName = appId.substring(appId.lastIndexOf(".") + 1, appId.length());
+        String appName = appId.substring(appId.lastIndexOf(".") + 1, appId.length()).toLowerCase();
 
-        String folderName = appName.toLowerCase() + "_backup/" + source.getName();
+        String folderName = appName + "_backup" +
+                File.separatorChar +
+                Device.getUserId() +
+                File.separatorChar +
+                source.getName();
 
         File backupFolder = new File(dest, folderName);
 
