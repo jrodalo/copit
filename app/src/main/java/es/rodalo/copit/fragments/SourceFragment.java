@@ -21,8 +21,8 @@ import com.nononsenseapps.filepicker.FilePickerActivity;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
 import org.apache.commons.io.comparator.LastModifiedFileComparator;
-import org.apache.commons.io.filefilter.FalseFileFilter;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -235,7 +235,7 @@ public class SourceFragment extends Fragment {
         return FileUtils.listFiles(
                 directory,
                 new SuffixFileFilter(imageExtensions, IOCase.INSENSITIVE),
-                FalseFileFilter.FALSE);
+                TrueFileFilter.TRUE);
     }
 
 
@@ -247,7 +247,7 @@ public class SourceFragment extends Fragment {
         return FileUtils.listFiles(
                 directory,
                 new SuffixFileFilter(videoExtensions, IOCase.INSENSITIVE),
-                FalseFileFilter.FALSE);
+                TrueFileFilter.TRUE);
     }
 
 
