@@ -59,7 +59,7 @@ public class SourceFragment extends Fragment {
     private static final int REQUEST_SOURCE_DIRECTORY = 1;
 
     private static final String[] imageExtensions = new String[]{"jpg", "jpeg", "png", "gif", "bmp"};
-    private static final String[] videoExtensions = new String[]{"avi", "mpg", "mpeg", "mov"};
+    private static final String[] videoExtensions = new String[]{"mp4", "avi", "mpg", "mpeg", "mov"};
 
     private String mPath;
 
