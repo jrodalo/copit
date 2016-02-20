@@ -20,7 +20,6 @@ import com.nononsenseapps.filepicker.FilePickerActivity;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
-import org.apache.commons.io.comparator.LastModifiedFileComparator;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
@@ -47,6 +46,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import es.rodalo.copit.R;
+import es.rodalo.copit.utils.Files;
 import es.rodalo.copit.utils.Preferences;
 import es.rodalo.copit.views.adapters.ImageAdapter;
 
@@ -221,7 +221,7 @@ public class SourceFragment extends Fragment {
 
         List<File> images = new ArrayList<>(getImages(directory));
 
-        Collections.sort(images, LastModifiedFileComparator.LASTMODIFIED_REVERSE);
+        Collections.sort(images, Files.lastModifiedComparator);
 
         return images;
     }
