@@ -100,19 +100,19 @@ public class Files {
     private static void validateCopy(File source, File dest) throws Exception {
 
         if (!source.exists() || !source.isDirectory()) {
-            throw new Error.SourceDontExists();
+            throw new Error.NoSourceException();
         }
 
         if (!dest.exists()) {
-            throw new Error.DestDontExists();
+            throw new Error.NoDestinationException();
         }
 
         if (!dest.isDirectory()) {
-            throw new Error.DestDontExists();
+            throw new Error.NoDestinationException();
         }
 
         if (!dest.canWrite()) {
-            throw new Error.DestDontExists();
+            throw new Error.NoDestinationException();
         }
 
         if (source.equals(dest)) {

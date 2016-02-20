@@ -133,7 +133,7 @@ public class CopyService extends IntentService implements Files.CopyProgressCall
     /**
      * Obtiene el nombre de la carpeta donde se guardarán los archivos copiados
      */
-    private File createBackupFolder(File source, File dest) throws Error.CantCreateBackupFolder {
+    private File createBackupFolder(File source, File dest) throws Error.CantCreateBackupFolderException {
 
         String appId = BuildConfig.APPLICATION_ID;
 
@@ -148,7 +148,7 @@ public class CopyService extends IntentService implements Files.CopyProgressCall
         File backupFolder = new File(dest, folderName);
 
         if ( ! backupFolder.exists() && ! backupFolder.mkdirs()) {
-            throw new Error.CantCreateBackupFolder();
+            throw new Error.CantCreateBackupFolderException();
         }
 
         return backupFolder;

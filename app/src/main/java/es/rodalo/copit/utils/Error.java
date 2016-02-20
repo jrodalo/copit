@@ -21,51 +21,62 @@ import es.rodalo.copit.R;
 /**
  * Errores lanzados por la aplicación
  */
-public class Error  {
+public class Error extends Exception {
 
-    public static class LowBatteryException extends Exception implements AppError {
+    public int getMessageKey() {
+        return R.string.copy_error;
+    }
+
+    public static class LowBatteryException extends Error {
+
+        @Override
         public int getMessageKey() {
             return R.string.copy_error_battery;
         }
     }
 
 
-    public static class IsChildException extends Exception implements AppError {
+    public static class IsChildException extends Error {
+
+        @Override
         public int getMessageKey() {
             return R.string.copy_error_samefolder;
         }
     }
 
 
-    public static class SameDirectoryException extends Exception implements AppError {
+    public static class SameDirectoryException extends Error {
+
+        @Override
         public int getMessageKey() {
             return R.string.copy_error_samefolder;
         }
     }
 
 
-    public static class DestDontExists extends Exception implements AppError {
+    public static class NoDestinationException extends Error {
+
+        @Override
         public int getMessageKey() {
             return R.string.copy_error_dest;
         }
     }
 
 
-    public static class SourceDontExists extends Exception implements AppError {
+    public static class NoSourceException extends Error {
+
+        @Override
         public int getMessageKey() {
             return R.string.copy_error_source;
         }
     }
 
 
-    public static class CantCreateBackupFolder extends Exception implements AppError {
+    public static class CantCreateBackupFolderException extends Error {
+
+        @Override
         public int getMessageKey() {
             return R.string.copy_error_dest;
         }
-    }
-
-
-    public interface AppError {
-        int getMessageKey();
     }
 }

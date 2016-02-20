@@ -23,7 +23,7 @@ public class CopyUnitTest {
     public final TemporaryFolder tempFolder = new TemporaryFolder();
 
 
-    @Test(expected = Error.SourceDontExists.class)
+    @Test(expected = Error.NoSourceException.class)
     public void should_throw_exception_when_source_folder_doesnt_exists() throws Exception {
 
         File source = new File("random_source_folder");

@@ -261,8 +261,8 @@ public class MainActivity extends FragmentActivity {
 
                     Exception exception = (Exception) intent.getSerializableExtra(CopyService.RESPONSE_ERROR);
 
-                    String message = (exception instanceof Error.AppError) ?
-                            getString(((Error.AppError) exception).getMessageKey()) :
+                    String message = (exception instanceof Error) ?
+                            getString(((Error) exception).getMessageKey()) :
                             getString(R.string.copy_error);
 
                     Message.error(mDestFragment.getView(), message);
