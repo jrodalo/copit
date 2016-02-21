@@ -93,7 +93,6 @@ public class MainActivity extends FragmentActivity {
         filter.addAction(CopyService.ACTION_START);
         filter.addAction(CopyService.ACTION_PROGRESS);
         filter.addAction(CopyService.ACTION_END);
-        filter.addAction(CopyService.ACTION_ERROR);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(onCopyEvent, filter);
     }
@@ -201,6 +200,64 @@ public class MainActivity extends FragmentActivity {
 
 
     /**
+     * Ejecuta las acciones necesarias al iniciar el proceso de copia
+     */
+    private void onCopyStarted() {
+
+        hideCopyButton();
+
+        if (mDestFragment.isAdded()) {
+            mDestFragment.showProgressPanel();
+        }
+    }
+
+
+    /**
+     * Ejecuta las acciones necesarias al avanzar en el proceso de copia
+     */
+    private void onCopyProgress(int progress, int total) {
+
+        if (mDestFragment.isAdded()) {
+            mDestFragment.showProgressPanel();
+            mDestFragment.updateProgress(progress, total);
+        }
+    }
+
+
+    /**
+     * Ejecuta las acciones necesarias al finalizar el proceso de copia
+     */
+    private void onCopyEnded(boolean success, Exception exception) {
+
+        if (success) {
+
+            Message.success(mDestFragment.getView(), getString(R.string.copy_success));
+            Preferences.setLastTime(new Date());
+
+        } else {
+
+            String message = (exception != null && exception instanceof Error) ?
+                    getString(((Error) exception).getMessageKey()) :
+                    getString(R.string.copy_error);
+
+            Message.error(mDestFragment.getView(), message);
+        }
+
+        if (mDestFragment.isAdded()) {
+            mDestFragment.hideProgress();
+            mDestFragment.updateLabels();
+        }
+
+        // Necesario para evitar un problema cuando el servicio termina muy rápido
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                showCopyButton();
+            }
+        }, 500);
+    }
+
+
+    /**
      * Gestiona los eventos lanzados desde el servicio de copia
      */
     private final BroadcastReceiver onCopyEvent = new BroadcastReceiver() {
@@ -208,65 +265,27 @@ public class MainActivity extends FragmentActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-
             switch (intent.getAction()) {
 
                 case CopyService.ACTION_START:
 
-                    hideCopyButton();
-
-                    if (mDestFragment.isAdded()) {
-                        mDestFragment.showProgressPanel();
-                    }
-
+                    onCopyStarted();
                     break;
 
                 case CopyService.ACTION_PROGRESS:
 
-                    if (mDestFragment.isAdded()) {
+                    int progress = intent.getIntExtra(CopyService.RESPONSE_PROGRESS, 0);
+                    int total = intent.getIntExtra(CopyService.RESPONSE_TOTAL, 0);
 
-                        int progress = intent.getIntExtra(CopyService.RESPONSE_PROGRESS, 0);
-                        int total = intent.getIntExtra(CopyService.RESPONSE_TOTAL, 0);
-
-                        mDestFragment.showProgressPanel();
-                        mDestFragment.updateProgress(progress, total);
-                    }
-
+                    onCopyProgress(progress, total);
                     break;
 
                 case CopyService.ACTION_END:
 
                     boolean result = intent.getBooleanExtra(CopyService.RESPONSE_RESULT, false);
-
-                    if (result) {
-                        Message.success(mDestFragment.getView(), getString(R.string.copy_success));
-                        Preferences.setLastTime(new Date());
-                    }
-
-                    if (mDestFragment.isAdded()) {
-                        mDestFragment.hideProgress();
-                        mDestFragment.updateLabels();
-                    }
-
-                    // Necesario para evitar un problema cuando el servicio termina muy rápido
-                    new Handler().postDelayed(new Runnable() {
-                        public void run() {
-                            showCopyButton();
-                        }
-                    }, 500);
-
-                    break;
-
-                case CopyService.ACTION_ERROR:
-
                     Exception exception = (Exception) intent.getSerializableExtra(CopyService.RESPONSE_ERROR);
 
-                    String message = (exception instanceof Error) ?
-                            getString(((Error) exception).getMessageKey()) :
-                            getString(R.string.copy_error);
-
-                    Message.error(mDestFragment.getView(), message);
-
+                    onCopyEnded(result, exception);
                     break;
             }
         }
@@ -295,8 +314,5 @@ public class MainActivity extends FragmentActivity {
             mFabCopy.hide();
         }
     }
-
-
-
 
 }
