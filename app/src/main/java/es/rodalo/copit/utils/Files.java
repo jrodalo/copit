@@ -17,15 +17,22 @@
 package es.rodalo.copit.utils;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOCase;
+import org.apache.commons.io.filefilter.SuffixFileFilter;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Comparator;
 
 /**
  * Métodos para trabajar con ficheros
  */
 public class Files {
+
+    private static final String[] imageExtensions = new String[]{"jpg", "jpeg", "png", "gif", "bmp"};
+    private static final String[] videoExtensions = new String[]{"mp4", "avi", "mpg", "mpeg", "mov"};
 
 
     /**
@@ -167,6 +174,30 @@ public class Files {
         }
 
         return false;
+    }
+
+
+    /**
+     * Obtiene las imagenes de la carpeta indicada
+     */
+    public static Collection<File> getImages(File directory) {
+
+        return FileUtils.listFiles(
+                directory,
+                new SuffixFileFilter(imageExtensions, IOCase.INSENSITIVE),
+                TrueFileFilter.TRUE);
+    }
+
+
+    /**
+     * Obtiene los videos de la carpeta indicada
+     */
+    public static Collection<File> getVideos(File directory) {
+
+        return FileUtils.listFiles(
+                directory,
+                new SuffixFileFilter(videoExtensions, IOCase.INSENSITIVE),
+                TrueFileFilter.TRUE);
     }
 
 

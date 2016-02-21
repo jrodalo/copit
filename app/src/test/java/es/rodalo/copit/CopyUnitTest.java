@@ -52,7 +52,6 @@ public class CopyUnitTest {
     }
 
 
-
     @Test(expected = Error.IsChildException.class)
     public void should_throw_exception_when_one_folder_contains_the_other() throws Exception {
 
@@ -103,6 +102,39 @@ public class CopyUnitTest {
 
         assertThat(dest.listFiles().length, is(1));
         assertThat(dest.listFiles()[0].lastModified(), is(image.lastModified()));
+    }
+
+
+    @Test
+    public void should_count_images_and_videos_in_subdirectories() throws Exception {
+
+        File source = tempFolder.newFolder("test-source");
+        File subdir = new File(source, "subdir");
+
+        assertThat(subdir.mkdir(), is(true));
+
+        File[] images = createFiles(
+                new File(source, "image1.png"),
+                new File(source, "image2.jpg")
+        );
+
+        File[] moreImages = createFiles(
+                new File(subdir, "image3.bmp"),
+                new File(subdir, "image4.gif")
+        );
+
+        File[] videos = createFiles(
+                new File(source, "video1.avi"),
+                new File(source, "video2.mp4")
+        );
+
+        File[] moreVideos = createFiles(
+                new File(subdir, "video3.mov"),
+                new File(subdir, "video4.mpg")
+        );
+
+        assertThat(Files.getImages(source).size(), is(images.length + moreImages.length));
+        assertThat(Files.getVideos(source).size(), is(videos.length + moreVideos.length));
     }
 
 

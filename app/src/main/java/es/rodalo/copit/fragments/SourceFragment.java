@@ -18,11 +18,6 @@ package es.rodalo.copit.fragments;
 
 import com.nononsenseapps.filepicker.FilePickerActivity;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOCase;
-import org.apache.commons.io.filefilter.SuffixFileFilter;
-import org.apache.commons.io.filefilter.TrueFileFilter;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -38,7 +33,6 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -57,9 +51,6 @@ public class SourceFragment extends Fragment {
 
     private static final String ARG_SOURCE_PATH = "path";
     private static final int REQUEST_SOURCE_DIRECTORY = 1;
-
-    private static final String[] imageExtensions = new String[]{"jpg", "jpeg", "png", "gif", "bmp"};
-    private static final String[] videoExtensions = new String[]{"mp4", "avi", "mpg", "mpeg", "mov"};
 
     private String mPath;
 
@@ -160,8 +151,8 @@ public class SourceFragment extends Fragment {
 
                 mTextTitle.setText(directory.getName());
 
-                int imageCount = getImages(directory).size();
-                int videoCount = getVideos(directory).size();
+                int imageCount = Files.getImages(directory).size();
+                int videoCount = Files.getVideos(directory).size();
 
                 String photosCountText = getResources().getQuantityString(R.plurals.photos_count, imageCount, imageCount);
                 String videosCountText = getResources().getQuantityString(R.plurals.videos_count, videoCount, videoCount);
@@ -219,35 +210,11 @@ public class SourceFragment extends Fragment {
             return Collections.emptyList();
         }
 
-        List<File> images = new ArrayList<>(getImages(directory));
+        List<File> images = new ArrayList<>(Files.getImages(directory));
 
         Collections.sort(images, Files.lastModifiedComparator);
 
         return images;
-    }
-
-
-    /**
-     * Obtiene las imagenes de la carpeta indicada
-     */
-    private Collection<File> getImages(File directory) {
-
-        return FileUtils.listFiles(
-                directory,
-                new SuffixFileFilter(imageExtensions, IOCase.INSENSITIVE),
-                TrueFileFilter.TRUE);
-    }
-
-
-    /**
-     * Obtiene los videos de la carpeta indicada
-     */
-    private Collection<File> getVideos(File directory) {
-
-        return FileUtils.listFiles(
-                directory,
-                new SuffixFileFilter(videoExtensions, IOCase.INSENSITIVE),
-                TrueFileFilter.TRUE);
     }
 
 
