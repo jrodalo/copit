@@ -25,7 +25,7 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import java.io.File;
 
-import es.rodalo.copit.BuildConfig;
+import es.rodalo.copit.R;
 import es.rodalo.copit.utils.ApplicationContext;
 import es.rodalo.copit.utils.Device;
 import es.rodalo.copit.utils.Error;
@@ -40,7 +40,6 @@ public class CopyService extends IntentService implements Files.CopyProgressCall
     public static final String ACTION_START = "es.rodalo.copit.intent.copy.start";
     public static final String ACTION_PROGRESS = "es.rodalo.copit.intent.copy.progress";
     public static final String ACTION_END = "es.rodalo.copit.intent.copy.end";
-    public static final String ACTION_ERROR = "es.rodalo.copit.intent.copy.error";
 
     public static final String PARAM_SOURCE = "source";
     public static final String PARAM_DEST = "dest";
@@ -48,7 +47,7 @@ public class CopyService extends IntentService implements Files.CopyProgressCall
     public static final String RESPONSE_PROGRESS = "progress";
     public static final String RESPONSE_TOTAL = "total";
     public static final String RESPONSE_RESULT = "result";
-    public static final String RESPONSE_ERROR = "error";
+    public static final String RESPONSE_ERROR = "exception";
 
 
     public CopyService() {
@@ -72,12 +71,11 @@ public class CopyService extends IntentService implements Files.CopyProgressCall
 
             Files.copyFolder(source, backup, this);
 
-            onEnd(true);
+            onEnd();
 
         } catch (Exception e) {
 
             onError(e);
-            onEnd(false);
         }
     }
 
@@ -105,18 +103,19 @@ public class CopyService extends IntentService implements Files.CopyProgressCall
     /**
      * Notifica el final del proceso de copia
      */
-    private void onEnd(boolean result) {
+    private void onEnd() {
         Intent intent = new Intent(ACTION_END);
-        intent.putExtra(RESPONSE_RESULT, result);
+        intent.putExtra(RESPONSE_RESULT, true);
         publish(intent);
     }
 
 
     /**
-     * Notifica un error durante el proceso de copia
+     * Notifica el final del proceso de copia con error
      */
     private void onError(Exception exception) {
-        Intent intent = new Intent(ACTION_ERROR);
+        Intent intent = new Intent(ACTION_END);
+        intent.putExtra(RESPONSE_RESULT, false);
         intent.putExtra(RESPONSE_ERROR, exception);
         publish(intent);
     }
@@ -135,9 +134,7 @@ public class CopyService extends IntentService implements Files.CopyProgressCall
      */
     private File createBackupFolder(File source, File dest) throws Error.CantCreateBackupFolderException {
 
-        String appId = BuildConfig.APPLICATION_ID;
-
-        String appName = appId.substring(appId.lastIndexOf(".") + 1, appId.length()).toLowerCase();
+        String appName = getString(R.string.app_name).toLowerCase();
 
         String folderName = appName + "_backup" +
                 File.separatorChar +

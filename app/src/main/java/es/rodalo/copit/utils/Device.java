@@ -60,7 +60,7 @@ public class Device {
         Account[] accounts = AccountManager.get(ApplicationContext.getAppContext()).getAccounts();
 
         for (Account account : accounts) {
-            if (account.type.equalsIgnoreCase("com.google")) {
+            if ("com.google".equalsIgnoreCase(account.type)) {
                 id = account.name;
                 break;
             }
@@ -81,9 +81,9 @@ public class Device {
 
         File dcimFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
 
-        File cameraFolder = new File(dcimFolder, "Camera/");
+        File cameraFolder = new File(dcimFolder, "Camera");
 
-        if (cameraFolder.exists()) {
+        if (cameraFolder.exists() && cameraFolder.isDirectory()) {
             return cameraFolder.getAbsolutePath();
         }
 
@@ -102,7 +102,7 @@ public class Device {
 
             File usb = new File(path);
 
-            if (usb.exists()) {
+            if (usb.exists() && usb.isDirectory()) {
                 return usb.getAbsolutePath();
             }
         }
