@@ -51,26 +51,38 @@ public class Device {
 
     /**
      * Obtiene un identificador del usuario. Puede ser o bien el nombre de su cuenta de google
-     * o bien el identificador de su dispositivo
+     * más el identificador único de su dispositivo o bien solo el identificador del dispositivo
+     * si no tenía una cuenta de email configurada
      */
     public static String getUserId() {
 
-        String id = null;
+        String email = getUserEmail();
+
+        String userId = (email != null) ? email.substring(0, email.indexOf("@") + 1) : "";
+
+        String deviceId = Settings.Secure.getString(ApplicationContext.getAppContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+
+        return userId + deviceId;
+    }
+
+
+    /**
+     * Obtiene el email del usuario o null si no tiene cuentas configuradas
+     */
+    public static String getUserEmail() {
 
         Account[] accounts = AccountManager.get(ApplicationContext.getAppContext()).getAccounts();
 
+        String email = null;
+
         for (Account account : accounts) {
             if ("com.google".equalsIgnoreCase(account.type)) {
-                id = account.name;
+                email = account.name;
                 break;
             }
         }
 
-        if (id == null) {
-            id = Settings.Secure.getString(ApplicationContext.getAppContext().getContentResolver(), Settings.Secure.ANDROID_ID);
-        }
-
-        return id;
+        return email;
     }
 
 
