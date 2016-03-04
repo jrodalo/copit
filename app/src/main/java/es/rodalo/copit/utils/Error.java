@@ -76,7 +76,7 @@ public class Error extends Exception {
 
         @Override
         public int getMessageKey() {
-            return R.string.copy_error_dest;
+            return R.string.copy_error_cant_write;
         }
     }
 }

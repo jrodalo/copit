@@ -6,6 +6,7 @@
     <string name="button_select_source">Select source</string>
     <string name="copy_count">%1$d of %2$d</string>
     <string name="copy_error">Something gone wrong…</string>
+    <string name="copy_error_cant_write">Can\'t write to the destination folder</string>
     <string name="copy_error_battery">Low battery</string>
     <string name="copy_error_dest">You should select the destination folder</string>
     <string name="copy_error_samefolder">Both folders can\'t be the same</string>

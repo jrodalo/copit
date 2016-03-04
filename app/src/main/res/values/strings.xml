@@ -15,6 +15,7 @@
     <string name="copy_count">%1$d de %2$d</string>
     <string name="copy_success">Copia finalizada correctamente</string>
     <string name="copy_error">Algo ha ido mal…</string>
+    <string name="copy_error_cant_write">No puedo escribir en la carpeta de destino</string>
     <string name="copy_error_source">Debes indicar la carpeta de las fotos</string>
     <string name="copy_error_dest">Debes indicar la carpeta de destino</string>
     <string name="copy_error_samefolder">Las carpetas no pueden ser la misma</string>
