@@ -2,15 +2,9 @@
 <resources>
 
     <string name="app_name">Copit</string>
-    <string name="ellipsis" translatable="false">…</string>
-    <string name="source_select_folder">¿Dónde están las fotos que quieres copiar?</string>
-    <string name="source_select_folder_button">Buscar fotos</string>
     <string name="dest_select_folder">¿Dónde quieres guardar las fotos?</string>
     <string name="dest_select_folder_button">Buscar una carpeta</string>
     <string name="dest_copy_inprogress">No desconectes el pendrive todavía</string>
-    <string name="select_folders_description">Seleccionar carpetas</string>
-    <string name="button_select_source">Seleccionar origen</string>
-    <string name="button_select_dest">Seleccionar destino</string>
     <string name="file_count">(%1$s y %2$s)</string>
     <string name="copy_count">%1$d de %2$d</string>
     <string name="copy_success">Copia finalizada correctamente</string>
@@ -19,7 +13,16 @@
     <string name="copy_error_source">Debes indicar la carpeta de las fotos</string>
     <string name="copy_error_dest">Debes indicar la carpeta de destino</string>
     <string name="copy_error_samefolder">Las carpetas no pueden ser la misma</string>
-    <string name="copy_error_battery">Tienes poca batería</string>
+
+    <string name="configuration_activity_title">Configuración</string>
+
+    <string name="source_text_title">Mis fotos</string>
+    <string name="source_no_sources_title">No hay fotos</string>
+    <string name="source_no_sources_subtitle">Selecciona las fotos que deseas copiar</string>
+    <string name="source_camera">Cámara de fotos</string>
+    <string name="source_screenshots">Capturas de pantalla</string>
+    <string name="source_whatsapp">Fotos de Whatsapp</string>
+    <string name="source_facebook">Fotos de Facebook</string>
 
     <string name="nnf_new_folder">Nueva carpeta</string>
     <string name="nnf_create_folder_error">Error al crear la carpeta</string>

@@ -19,9 +19,14 @@ package es.rodalo.copit.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import es.rodalo.copit.BuildConfig;
+import es.rodalo.copit.R;
 
 /**
  * Facilita el uso de las preferencias usadas en la aplicación
@@ -29,9 +34,8 @@ import es.rodalo.copit.BuildConfig;
 public class Preferences {
 
     private static final String PREFS_NAME = BuildConfig.APPLICATION_ID + "_preferences";
-    private static final String PREF_SOURCE_DIRECTORY = "sourceDir";
     private static final String PREF_DEST_DIRECTORY = "destDir";
-    private static final String PREF_FIRST_TIME = "firtTime";
+    private static final String PREF_DEST_BACKUP_FOLDER_NAME = "destBackupFolderName";
     private static final String PREF_LAST_TIME = "lastTime";
 
     private static SharedPreferences getSharedPreferences() {
@@ -40,24 +44,42 @@ public class Preferences {
     }
 
 
-    /**
-     * Obtiene la carpeta de origen
-     */
-    public static String getSourceFolder() {
-        return getSharedPreferences().getString(PREF_SOURCE_DIRECTORY, "");
+    public static void init() {
+        initSources();
+        initBackupFolderName();
     }
 
 
     /**
-     * Establece la carpeta de origen
+     * Inicializa las preferencias con los origenes existentes
      */
-    public static void setSourceFolder(String path) {
+    private static void initSources() {
 
         SharedPreferences.Editor editor = getSharedPreferences().edit();
 
-        editor.putString(PREF_SOURCE_DIRECTORY, path);
+        for (Sources source : Sources.values()) {
+            editor.putBoolean(source.getKey(), source.checkedByDefault());
+        }
 
         editor.apply();
+    }
+
+
+    private static String initBackupFolderName() {
+
+        String appName = ApplicationContext.getAppContext().getString(R.string.app_name).toLowerCase();
+
+        String folderName = appName + "_backup" +
+                File.separatorChar +
+                Device.getUserId();
+
+        SharedPreferences.Editor editor = getSharedPreferences().edit();
+
+        editor.putString(PREF_DEST_BACKUP_FOLDER_NAME, folderName);
+
+        editor.apply();
+
+        return folderName;
     }
 
 
@@ -83,23 +105,25 @@ public class Preferences {
 
 
     /**
-     * Comprueba si es la primera vez que se ejecuta la app
+     * Obtiene el nombre de la carpeta donde se guardarán las fotos
      */
-    public static boolean isTheFirstTime() {
-        return getSharedPreferences().getBoolean(PREF_FIRST_TIME, true);
+    public static String getBackupFolderName() {
+
+        String backupFolderName = getSharedPreferences().getString(PREF_DEST_BACKUP_FOLDER_NAME, "");
+
+        if (backupFolderName.isEmpty()) {
+            backupFolderName = initBackupFolderName();
+        }
+
+        return backupFolderName;
     }
 
 
     /**
-     * Establece si es la primera vez que se ejecuta la app
+     * Comprueba si es la primera vez que se ejecuta la app
      */
-    public static void setFirstTime(boolean first) {
-
-        SharedPreferences.Editor editor = getSharedPreferences().edit();
-
-        editor.putBoolean(PREF_FIRST_TIME, first);
-
-        editor.apply();
+    public static boolean isTheFirstTime() {
+        return getSharedPreferences().getAll().size() == 0;
     }
 
 
@@ -116,10 +140,45 @@ public class Preferences {
      */
     public static void setLastTime(Date time) {
 
-        SharedPreferences.Editor  editor = getSharedPreferences().edit();
+        SharedPreferences.Editor editor = getSharedPreferences().edit();
 
         editor.putLong(PREF_LAST_TIME, time.getTime());
 
         editor.apply();
+    }
+
+
+    /**
+     * Obtiene una lista de origenes seleccionados en la pantalla de configuración
+     */
+    public static List<Sources> getSelectedSources() {
+
+        Map<String, ?> allPreferences = getSharedPreferences().getAll();
+
+        List<Sources> sources = new ArrayList<>();
+
+        for (Map.Entry<String, ?> entry : allPreferences.entrySet()) {
+
+            String key = entry.getKey();
+            Object value = entry.getValue() != null ? entry.getValue() : false;
+
+            if (key.startsWith(Sources.SOURCE_KEY_PREFIX) && Boolean.valueOf(value.toString())) {
+
+                String sourceName = key.substring(Sources.SOURCE_KEY_PREFIX.length(), key.length()).toUpperCase();
+
+                try {
+
+                    sources.add(Sources.valueOf(sourceName));
+
+                } catch (IllegalArgumentException ignore) {
+
+                    // Si falla aquí es porque se habrá cambiado el nombre del enum... podemos eliminarla
+
+                    getSharedPreferences().edit().remove(key).apply();
+                }
+            }
+        }
+
+        return sources;
     }
 }
