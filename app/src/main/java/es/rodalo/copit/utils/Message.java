@@ -33,7 +33,6 @@ public class Message {
     public enum Types {
 
         SUCCESS(R.color.colorSuccess),
-        WARNING(R.color.colorWarning),
         ERROR(R.color.colorError);
 
         final int color;
@@ -62,14 +61,6 @@ public class Message {
      */
     public static void success(View view, String text) {
         show(view, text, Types.SUCCESS);
-    }
-
-
-    /**
-     * Muestra un mensaje de aviso
-     */
-    public static void warning(View view, String text) {
-        show(view, text, Types.WARNING);
     }
 
 

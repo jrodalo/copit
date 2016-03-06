@@ -27,14 +27,6 @@ public class Error extends Exception {
         return R.string.copy_error;
     }
 
-    public static class LowBatteryException extends Error {
-
-        @Override
-        public int getMessageKey() {
-            return R.string.copy_error_battery;
-        }
-    }
-
 
     public static class IsChildException extends Error {
 

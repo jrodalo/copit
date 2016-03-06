@@ -18,10 +18,6 @@ package es.rodalo.copit.utils;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.BatteryManager;
-import android.os.Environment;
 import android.provider.Settings;
 
 import java.io.File;
@@ -30,23 +26,6 @@ import java.io.File;
  * Utilidades relacionadas con el dispositivo
  */
 public class Device {
-
-    /**
-     * Obtiene el nivel de batería actual
-     */
-    public static float getBatteryLevel() {
-
-        Intent batteryStatus = ApplicationContext.getAppContext().registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-
-        if (batteryStatus == null) {
-            return -1f;
-        }
-
-        int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
-        int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
-
-        return ((float) level / (float) scale) * 100.0f;
-    }
 
 
     /**
@@ -69,7 +48,7 @@ public class Device {
     /**
      * Obtiene el email del usuario o null si no tiene cuentas configuradas
      */
-    public static String getUserEmail() {
+    private static String getUserEmail() {
 
         Account[] accounts = AccountManager.get(ApplicationContext.getAppContext()).getAccounts();
 
@@ -83,23 +62,6 @@ public class Device {
         }
 
         return email;
-    }
-
-
-    /**
-     * Intenta obtener una posible carpeta de origen
-     */
-    public static String guessSourceFolder() {
-
-        File dcimFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
-
-        File cameraFolder = new File(dcimFolder, "Camera");
-
-        if (cameraFolder.exists() && cameraFolder.isDirectory()) {
-            return cameraFolder.getAbsolutePath();
-        }
-
-        return "";
     }
 
 

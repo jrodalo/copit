@@ -24,12 +24,13 @@ import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 
 import java.io.File;
+import java.util.List;
 
-import es.rodalo.copit.R;
 import es.rodalo.copit.utils.ApplicationContext;
-import es.rodalo.copit.utils.Device;
 import es.rodalo.copit.utils.Error;
 import es.rodalo.copit.utils.Files;
+import es.rodalo.copit.utils.Preferences;
+import es.rodalo.copit.utils.Sources;
 
 
 /**
@@ -40,9 +41,6 @@ public class CopyService extends IntentService implements Files.CopyProgressCall
     public static final String ACTION_START = "es.rodalo.copit.intent.copy.start";
     public static final String ACTION_PROGRESS = "es.rodalo.copit.intent.copy.progress";
     public static final String ACTION_END = "es.rodalo.copit.intent.copy.end";
-
-    public static final String PARAM_SOURCE = "source";
-    public static final String PARAM_DEST = "dest";
 
     public static final String RESPONSE_PROGRESS = "progress";
     public static final String RESPONSE_TOTAL = "total";
@@ -65,11 +63,19 @@ public class CopyService extends IntentService implements Files.CopyProgressCall
 
         try {
 
-            File source = (File) intent.getExtras().get(PARAM_SOURCE);
-            File dest = (File) intent.getExtras().get(PARAM_DEST);
-            File backup = createBackupFolder(source, dest);
+            List<Sources> selectedSources = Preferences.getSelectedSources();
+            File dest = new File(Preferences.getDestFolder());
+            String backupFolderName = Preferences.getBackupFolderName();
 
-            Files.copyFolder(source, backup, this);
+            for (Sources selectedSource : selectedSources) {
+
+                for (File source : selectedSource.getActivePaths()) {
+
+                    File backup = createBackupFolder(source, dest, backupFolderName);
+
+                    Files.copyFolder(source, backup, this);
+                }
+            }
 
             onEnd();
 
@@ -132,13 +138,9 @@ public class CopyService extends IntentService implements Files.CopyProgressCall
     /**
      * Crea la carpeta donde se guardarán los archivos copiados
      */
-    private File createBackupFolder(File source, File dest) throws Error.CantCreateBackupFolderException {
+    private File createBackupFolder(File source, File dest, String backupFolderName) throws Error.CantCreateBackupFolderException {
 
-        String appName = getString(R.string.app_name).toLowerCase();
-
-        String folderName = appName + "_backup" +
-                File.separatorChar +
-                Device.getUserId() +
+        String folderName = backupFolderName +
                 File.separatorChar +
                 source.getName();
 
