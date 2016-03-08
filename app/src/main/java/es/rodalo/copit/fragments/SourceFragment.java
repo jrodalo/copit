@@ -165,6 +165,7 @@ public class SourceFragment extends Fragment {
         }
 
         mGridPhotos.setVisibility(View.VISIBLE);
+        mGridPhotos.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
         mGridPhotos.setAdapter(new ImageAdapter(getActivity().getApplicationContext(), recentImages));
     }
 

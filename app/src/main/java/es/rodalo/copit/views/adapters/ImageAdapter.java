@@ -63,6 +63,7 @@ public class ImageAdapter extends BaseAdapter {
 
         if (view == null) {
             view = new SquaredImageView(context);
+            view.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
         }
 
         File image = getItem(position);

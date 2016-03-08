@@ -6,6 +6,7 @@
     <string name="dest_select_folder_button">Buscar una carpeta</string>
     <string name="dest_copy_inprogress">No desconectes el pendrive todavía</string>
     <string name="file_count">(%1$s y %2$s)</string>
+    <string name="copy_button">Copiar fotos</string>
     <string name="copy_count">%1$d de %2$d</string>
     <string name="copy_success">Copia finalizada correctamente</string>
     <string name="copy_error">Algo ha ido mal…</string>
@@ -36,8 +37,8 @@
     </plurals>
 
     <plurals name="videos_count">
-        <item quantity="one">%d video</item>
-        <item quantity="other">%d videos</item>
+        <item quantity="one">%d vídeo</item>
+        <item quantity="other">%d vídeos</item>
     </plurals>
 
 </resources>

@@ -3,6 +3,7 @@
 
     <string name="app_name">Copit</string>
     <string name="copy_count">%1$d of %2$d</string>
+    <string name="copy_button">Copy photos</string>
     <string name="copy_error">Something gone wrong…</string>
     <string name="copy_error_cant_write">Can\'t write to the destination folder</string>
     <string name="copy_error_dest">You should select the destination folder</string>
