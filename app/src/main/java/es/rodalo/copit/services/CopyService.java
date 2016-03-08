@@ -26,6 +26,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import java.io.File;
 import java.util.List;
 
+import es.rodalo.copit.BuildConfig;
 import es.rodalo.copit.utils.ApplicationContext;
 import es.rodalo.copit.utils.Error;
 import es.rodalo.copit.utils.Files;
@@ -140,7 +141,13 @@ public class CopyService extends IntentService implements Files.CopyProgressCall
      */
     private File createBackupFolder(File source, File dest, String backupFolderName) throws Error.CantCreateBackupFolderException {
 
-        String folderName = backupFolderName +
+        String appId = BuildConfig.APPLICATION_ID;
+
+        String appName = appId.substring(appId.lastIndexOf(".") + 1, appId.length()).toLowerCase();
+
+        String folderName = appName + "_backup" +
+                File.separatorChar +
+                backupFolderName +
                 File.separatorChar +
                 source.getName();
 

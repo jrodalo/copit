@@ -35,8 +35,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import es.rodalo.copit.fragments.DestFragment;
 import es.rodalo.copit.fragments.SourceFragment;
+import es.rodalo.copit.migrations.MigrationManager;
 import es.rodalo.copit.services.CopyService;
-import es.rodalo.copit.utils.Device;
 import es.rodalo.copit.utils.Error;
 import es.rodalo.copit.utils.Message;
 import es.rodalo.copit.utils.Preferences;
@@ -61,7 +61,7 @@ public class MainActivity extends FragmentActivity {
 
         ButterKnife.bind(this);
 
-        firstTimeChecks();
+        checkMigrations();
 
         loadFragments();
 
@@ -93,17 +93,13 @@ public class MainActivity extends FragmentActivity {
     /**
      * Realiza algunas comprobaciones si es la primera vez que se ejecuta la app
      */
-    private void firstTimeChecks() {
+    private void checkMigrations() {
 
-        if (Preferences.isTheFirstTime()) {
+        int prefsVersion = Preferences.getVersion();
+        int buildVersion = BuildConfig.VERSION_CODE;
 
-            Preferences.init();
-
-            String destFolder = Device.guessDestFolder();
-
-            if (!destFolder.isEmpty()) {
-                Preferences.setDestFolder(destFolder);
-            }
+        if (prefsVersion < buildVersion) {
+            new MigrationManager().from(prefsVersion).to(buildVersion).migrate();
         }
     }
 

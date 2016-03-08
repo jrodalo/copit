@@ -19,14 +19,12 @@ package es.rodalo.copit.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import es.rodalo.copit.BuildConfig;
-import es.rodalo.copit.R;
 
 /**
  * Facilita el uso de las preferencias usadas en la aplicación
@@ -34,52 +32,16 @@ import es.rodalo.copit.R;
 public class Preferences {
 
     private static final String PREFS_NAME = BuildConfig.APPLICATION_ID + "_preferences";
-    private static final String PREF_DEST_DIRECTORY = "destDir";
-    private static final String PREF_DEST_BACKUP_FOLDER_NAME = "destBackupFolderName";
-    private static final String PREF_LAST_TIME = "lastTime";
 
-    private static SharedPreferences getSharedPreferences() {
+    private static final String PREF_DEST_DIRECTORY = "PREF_DEST_DIRECTORY";
+    public static final String PREF_BACKUP_FOLDER_NAME = "PREF_DEST_BACKUP_FOLDER_NAME";
+    private static final String PREF_LAST_TIME = "PREF_LAST_TIME";
+    private static final String PREF_VERSION = "PREF_VERSION";
+
+
+    public static SharedPreferences getSharedPreferences() {
         Context ctx = ApplicationContext.getAppContext();
         return ctx.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-    }
-
-
-    public static void init() {
-        initSources();
-        initBackupFolderName();
-    }
-
-
-    /**
-     * Inicializa las preferencias con los origenes existentes
-     */
-    private static void initSources() {
-
-        SharedPreferences.Editor editor = getSharedPreferences().edit();
-
-        for (Sources source : Sources.values()) {
-            editor.putBoolean(source.getKey(), source.checkedByDefault());
-        }
-
-        editor.apply();
-    }
-
-
-    private static String initBackupFolderName() {
-
-        String appName = ApplicationContext.getAppContext().getString(R.string.app_name).toLowerCase();
-
-        String folderName = appName + "_backup" +
-                File.separatorChar +
-                Device.getUserId();
-
-        SharedPreferences.Editor editor = getSharedPreferences().edit();
-
-        editor.putString(PREF_DEST_BACKUP_FOLDER_NAME, folderName);
-
-        editor.apply();
-
-        return folderName;
     }
 
 
@@ -109,21 +71,7 @@ public class Preferences {
      */
     public static String getBackupFolderName() {
 
-        String backupFolderName = getSharedPreferences().getString(PREF_DEST_BACKUP_FOLDER_NAME, "");
-
-        if (backupFolderName.isEmpty()) {
-            backupFolderName = initBackupFolderName();
-        }
-
-        return backupFolderName;
-    }
-
-
-    /**
-     * Comprueba si es la primera vez que se ejecuta la app
-     */
-    public static boolean isTheFirstTime() {
-        return getSharedPreferences().getAll().size() == 0;
+        return getSharedPreferences().getString(PREF_BACKUP_FOLDER_NAME, "backup");
     }
 
 
@@ -181,4 +129,26 @@ public class Preferences {
 
         return sources;
     }
+
+
+    /**
+     * Obtiene la versión actual de las preferencias (no la versión de la app)
+     */
+    public static int getVersion() {
+        return getSharedPreferences().getInt(PREF_VERSION, 0);
+    }
+
+
+    /**
+     * Establece la versión de las preferencias
+     */
+    public static void setVersion(int version) {
+
+        SharedPreferences.Editor editor = getSharedPreferences().edit();
+
+        editor.putInt(PREF_VERSION, version);
+
+        editor.apply();
+    }
+
 }
