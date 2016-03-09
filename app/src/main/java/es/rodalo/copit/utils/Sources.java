@@ -39,7 +39,7 @@ public enum Sources {
 
         @Override
         public int getStringId() {
-            return R.string.source_camera;
+            return R.string.label_source_camera;
         }
 
         @Override
@@ -57,7 +57,7 @@ public enum Sources {
 
         @Override
         public int getStringId() {
-            return R.string.source_screenshots;
+            return R.string.label_source_screenshots;
         }
 
         @Override
@@ -75,7 +75,7 @@ public enum Sources {
 
         @Override
         public int getStringId() {
-            return R.string.source_whatsapp;
+            return R.string.label_source_whatsapp;
         }
 
         @Override
@@ -93,7 +93,7 @@ public enum Sources {
 
         @Override
         public int getStringId() {
-            return R.string.source_facebook;
+            return R.string.label_source_facebook;
         }
 
         @Override

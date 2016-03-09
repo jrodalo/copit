@@ -34,7 +34,7 @@
 
         <activity
                 android:name=".ConfigurationActivity"
-                android:label="@string/configuration_activity_title"
+                android:label="@string/title_activity_configuration"
                 android:theme="@style/Base.V23.Theme.AppCompat.Light"
         />
 

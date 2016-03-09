@@ -203,7 +203,7 @@ public class DestFragment extends Fragment {
         total = (total > 0) ? total : 1;
 
         mProgressBar.setProgress((progress * 100) / total);
-        mProgressSubtitle.setText(getString(R.string.copy_count, progress, total));
+        mProgressSubtitle.setText(getString(R.string.label_copy_progress, progress, total));
     }
 
 

@@ -24,7 +24,7 @@ import es.rodalo.copit.R;
 public class Error extends Exception {
 
     public int getMessageKey() {
-        return R.string.copy_error;
+        return R.string.error_copy_unknown;
     }
 
 
@@ -32,7 +32,7 @@ public class Error extends Exception {
 
         @Override
         public int getMessageKey() {
-            return R.string.copy_error_samefolder;
+            return R.string.error_copy_samefolder;
         }
     }
 
@@ -41,7 +41,7 @@ public class Error extends Exception {
 
         @Override
         public int getMessageKey() {
-            return R.string.copy_error_samefolder;
+            return R.string.error_copy_samefolder;
         }
     }
 
@@ -50,7 +50,7 @@ public class Error extends Exception {
 
         @Override
         public int getMessageKey() {
-            return R.string.copy_error_dest;
+            return R.string.error_copy_unknown_dest;
         }
     }
 
@@ -59,7 +59,7 @@ public class Error extends Exception {
 
         @Override
         public int getMessageKey() {
-            return R.string.copy_error_source;
+            return R.string.error_copy_unknown_source;
         }
     }
 
@@ -68,7 +68,7 @@ public class Error extends Exception {
 
         @Override
         public int getMessageKey() {
-            return R.string.copy_error_cant_write;
+            return R.string.error_copy_rights;
         }
     }
 }

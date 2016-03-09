@@ -40,7 +40,7 @@
                     android:id="@+id/source_text_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/source_text_title"
+                    android:text="@string/label_photos"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textColor="@android:color/white"
                     android:textStyle="bold"
@@ -76,7 +76,7 @@
                 android:gravity="bottom|center_horizontal"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textStyle="bold"
-                android:text="@string/source_no_sources_title"
+                android:text="@string/label_unknown_sources"
         />
 
         <TextView
@@ -84,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="bottom|center_horizontal"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/source_no_sources_subtitle"
+                android:text="@string/label_select_sources"
         />
 
     </LinearLayout>

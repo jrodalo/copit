@@ -2,28 +2,30 @@
 <resources>
 
     <string name="app_name">Copit</string>
-    <string name="copy_count">%1$d of %2$d</string>
-    <string name="copy_button">Copy photos</string>
-    <string name="copy_error">Something gone wrong…</string>
-    <string name="copy_error_cant_write">Can\'t write to the destination folder</string>
-    <string name="copy_error_dest">You should select the destination folder</string>
-    <string name="copy_error_samefolder">Both folders can\'t be the same</string>
-    <string name="copy_error_source">You should select the photos folder</string>
-    <string name="copy_success">Copy finished successfully</string>
-    <string name="dest_copy_inprogress">Don\'t unplug the USB key yet</string>
-    <string name="dest_select_folder">Where do you want to save the photos?</string>
-    <string name="dest_select_folder_button">Search folder</string>
-    <string name="file_count">(%1$s and %2$s)</string>
 
-    <string name="configuration_activity_title">Configuration</string>
+    <string name="button_copy">Copy photos</string>
+    <string name="button_select_dest">Search folder</string>
 
-    <string name="source_text_title">My photos</string>
-    <string name="source_no_sources_title">No photos</string>
-    <string name="source_no_sources_subtitle">Select the photos you want to copy</string>
-    <string name="source_camera">Photos</string>
-    <string name="source_screenshots">Screenshots</string>
-    <string name="source_whatsapp">Whatsapp photos</string>
-    <string name="source_facebook">Facebook photos</string>
+    <string name="error_copy_rights">Can\'t write to the destination folder</string>
+    <string name="error_copy_samefolder">Both folders can\'t be the same</string>
+    <string name="error_copy_unknown">Something gone wrong…</string>
+    <string name="error_copy_unknown_dest">You should select the destination folder</string>
+    <string name="error_copy_unknown_source">You should select the photos folder</string>
+
+    <string name="label_copy_progress">%1$d of %2$d</string>
+    <string name="label_files_count">(%1$s and %2$s)</string>
+    <string name="label_photos">My photos</string>
+    <string name="label_select_sources">Select the photos you want to copy</string>
+    <string name="label_unknown_dest">Where do you want to save the photos?</string>
+    <string name="label_unknown_sources">No photos</string>
+    <string name="label_warning_progress">Don\'t unplug the USB key yet</string>
+
+    <string name="label_source_camera">Photos</string>
+    <string name="label_source_screenshots">Screenshots</string>
+    <string name="label_source_whatsapp">Whatsapp photos</string>
+    <string name="label_source_facebook">Facebook photos</string>
+
+    <string name="message_copy_success">Copy finished successfully</string>
 
     <string name="nnf_new_folder">New folder</string>
     <string name="nnf_create_folder_error">Failed to create folder</string>
@@ -31,12 +33,14 @@
     <string name="nnf_select_something_first">Please select something first</string>
     <string name="nnf_permission_external_write_denied">Permisson to access filesystem denied</string>
 
-    <plurals name="photos_count">
+    <string name="title_activity_configuration">Configuration</string>
+
+    <plurals name="plural_photos_count">
         <item quantity="one">%d photo</item>
         <item quantity="other">%d photos</item>
     </plurals>
 
-    <plurals name="videos_count">
+    <plurals name="plural_videos_count">
         <item quantity="one">%d video</item>
         <item quantity="other">%d videos</item>
     </plurals>

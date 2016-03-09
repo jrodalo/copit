@@ -2,28 +2,30 @@
 <resources>
 
     <string name="app_name">Copit</string>
-    <string name="dest_select_folder">¿Dónde quieres guardar las fotos?</string>
-    <string name="dest_select_folder_button">Buscar una carpeta</string>
-    <string name="dest_copy_inprogress">No desconectes el pendrive todavía</string>
-    <string name="file_count">(%1$s y %2$s)</string>
-    <string name="copy_button">Copiar fotos</string>
-    <string name="copy_count">%1$d de %2$d</string>
-    <string name="copy_success">Copia finalizada correctamente</string>
-    <string name="copy_error">Algo ha ido mal…</string>
-    <string name="copy_error_cant_write">No puedo escribir en la carpeta de destino</string>
-    <string name="copy_error_source">Debes indicar la carpeta de las fotos</string>
-    <string name="copy_error_dest">Debes indicar la carpeta de destino</string>
-    <string name="copy_error_samefolder">Las carpetas no pueden ser la misma</string>
 
-    <string name="configuration_activity_title">Configuración</string>
+    <string name="button_copy">Copiar fotos</string>
+    <string name="button_select_dest">Buscar una carpeta</string>
 
-    <string name="source_text_title">Mis fotos</string>
-    <string name="source_no_sources_title">No hay fotos</string>
-    <string name="source_no_sources_subtitle">Selecciona las fotos que deseas copiar</string>
-    <string name="source_camera">Cámara de fotos</string>
-    <string name="source_screenshots">Capturas de pantalla</string>
-    <string name="source_whatsapp">Fotos de Whatsapp</string>
-    <string name="source_facebook">Fotos de Facebook</string>
+    <string name="error_copy_rights">No puedo escribir en la carpeta de destino</string>
+    <string name="error_copy_samefolder">Las carpetas no pueden ser la misma</string>
+    <string name="error_copy_unknown">Algo ha ido mal…</string>
+    <string name="error_copy_unknown_dest">Debes indicar la carpeta de destino</string>
+    <string name="error_copy_unknown_source">Debes indicar la carpeta de las fotos</string>
+
+    <string name="label_copy_progress">%1$d de %2$d</string>
+    <string name="label_files_count">(%1$s y %2$s)</string>
+    <string name="label_photos">Mis fotos</string>
+    <string name="label_select_sources">Selecciona las fotos que deseas copiar</string>
+    <string name="label_unknown_dest">¿Dónde quieres guardar las fotos?</string>
+    <string name="label_unknown_sources">No hay fotos</string>
+    <string name="label_warning_progress">No desconectes el pendrive todavía</string>
+
+    <string name="label_source_camera">Cámara de fotos</string>
+    <string name="label_source_screenshots">Capturas de pantalla</string>
+    <string name="label_source_whatsapp">Fotos de Whatsapp</string>
+    <string name="label_source_facebook">Fotos de Facebook</string>
+
+    <string name="message_copy_success">Copia finalizada correctamente</string>
 
     <string name="nnf_new_folder">Nueva carpeta</string>
     <string name="nnf_create_folder_error">Error al crear la carpeta</string>
@@ -31,12 +33,14 @@
     <string name="nnf_select_something_first">Selecciona al menos un archivo</string>
     <string name="nnf_permission_external_write_denied">No tengo permiso para escribir</string>
 
-    <plurals name="photos_count">
+    <string name="title_activity_configuration">Configuración</string>
+
+    <plurals name="plural_photos_count">
         <item quantity="one">%d foto</item>
         <item quantity="other">%d fotos</item>
     </plurals>
 
-    <plurals name="videos_count">
+    <plurals name="plural_videos_count">
         <item quantity="one">%d vídeo</item>
         <item quantity="other">%d vídeos</item>
     </plurals>

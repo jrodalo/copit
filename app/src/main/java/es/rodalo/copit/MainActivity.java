@@ -179,7 +179,7 @@ public class MainActivity extends FragmentActivity {
     private void onCopyEnded(boolean success) {
 
         if (success) {
-            Message.success(mDestFragment.getView(), getString(R.string.copy_success));
+            Message.success(mDestFragment.getView(), getString(R.string.message_copy_success));
             Preferences.setLastTime(new Date());
         }
 
@@ -204,7 +204,7 @@ public class MainActivity extends FragmentActivity {
 
         String message = (exception != null && exception instanceof Error) ?
                 getString(((Error) exception).getMessageKey()) :
-                getString(R.string.copy_error);
+                getString(R.string.error_copy_unknown);
 
         Message.error(mDestFragment.getView(), message);
 

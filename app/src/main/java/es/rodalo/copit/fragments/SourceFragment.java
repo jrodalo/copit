@@ -134,10 +134,10 @@ public class SourceFragment extends Fragment {
                 }
             }
 
-            String photosCountText = getResources().getQuantityString(R.plurals.photos_count, imageCount, imageCount);
-            String videosCountText = getResources().getQuantityString(R.plurals.videos_count, videoCount, videoCount);
+            String photosCountText = getResources().getQuantityString(R.plurals.plural_photos_count, imageCount, imageCount);
+            String videosCountText = getResources().getQuantityString(R.plurals.plural_videos_count, videoCount, videoCount);
 
-            mTextSubtitle.setText(getString(R.string.file_count, photosCountText, videosCountText));
+            mTextSubtitle.setText(getString(R.string.label_files_count, photosCountText, videosCountText));
 
             showMainPanel();
         }
