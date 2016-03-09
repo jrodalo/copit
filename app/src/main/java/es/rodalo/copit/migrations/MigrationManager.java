@@ -45,17 +45,15 @@ public class MigrationManager {
      */
     public void migrate() {
 
-        SharedPreferences.Editor preferenceEditor = Preferences.getSharedPreferences().edit();
-
         Migration migration = getMigration(newVersion, currentVersion);
 
         if (migration != null) {
+            SharedPreferences.Editor preferenceEditor = Preferences.getSharedPreferences().edit();
             migration.migrate(preferenceEditor, currentVersion);
+            preferenceEditor.apply();
         }
 
-        if (preferenceEditor.commit()) {
-            Preferences.setVersion(newVersion);
-        }
+        Preferences.setVersion(newVersion);
     }
 
 
