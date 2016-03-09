@@ -176,20 +176,11 @@ public class MainActivity extends FragmentActivity {
     /**
      * Ejecuta las acciones necesarias al finalizar el proceso de copia
      */
-    private void onCopyEnded(boolean success, Exception exception) {
+    private void onCopyEnded(boolean success) {
 
         if (success) {
-
             Message.success(mDestFragment.getView(), getString(R.string.copy_success));
             Preferences.setLastTime(new Date());
-
-        } else {
-
-            String message = (exception != null && exception instanceof Error) ?
-                    getString(((Error) exception).getMessageKey()) :
-                    getString(R.string.copy_error);
-
-            Message.error(mDestFragment.getView(), message);
         }
 
         if (mDestFragment.isAdded()) {
@@ -203,6 +194,21 @@ public class MainActivity extends FragmentActivity {
                 showCopyButton();
             }
         }, 500);
+    }
+
+
+    /**
+     * Ejecuta las acciones necesarias cuando se produce un error en la copia
+     */
+    private void onCopyError(Exception exception) {
+
+        String message = (exception != null && exception instanceof Error) ?
+                getString(((Error) exception).getMessageKey()) :
+                getString(R.string.copy_error);
+
+        Message.error(mDestFragment.getView(), message);
+
+        onCopyEnded(false);
     }
 
 
@@ -232,9 +238,14 @@ public class MainActivity extends FragmentActivity {
                 case CopyService.ACTION_END:
 
                     boolean result = intent.getBooleanExtra(CopyService.RESPONSE_RESULT, false);
-                    Exception exception = (Exception) intent.getSerializableExtra(CopyService.RESPONSE_ERROR);
 
-                    onCopyEnded(result, exception);
+                    if (result) {
+                        onCopyEnded(true);
+                    } else {
+                        Exception exception = (Exception) intent.getSerializableExtra(CopyService.RESPONSE_ERROR);
+                        onCopyError(exception);
+                    }
+
                     break;
             }
         }
