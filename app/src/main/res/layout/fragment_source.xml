@@ -41,9 +41,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/label_photos"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/text_title_size"
                     android:textColor="@android:color/white"
                     android:textStyle="bold"
+                    android:shadowColor="#C0000000"
+                    android:shadowDx="1"
+                    android:shadowDy="1"
+                    android:shadowRadius="1"
                     android:layout_gravity="center"
                     android:gravity="bottom|center_horizontal"
             />
@@ -52,9 +56,13 @@
                     android:id="@+id/source_text_subtitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textSize="@dimen/text_subtitle_size"
                     android:gravity="top|center_horizontal"
                     android:textColor="@android:color/white"
+                    android:shadowColor="#C0000000"
+                    android:shadowDx="1"
+                    android:shadowDy="1"
+                    android:shadowRadius="1"
                     tools:text="Subtitle"
             />
         </LinearLayout>
@@ -74,7 +82,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="bottom|center_horizontal"
-                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="@dimen/text_title_size"
+                android:textColor="#000000"
                 android:textStyle="bold"
                 android:text="@string/label_unknown_sources"
         />
@@ -83,7 +92,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="bottom|center_horizontal"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="@dimen/text_subtitle_size"
                 android:text="@string/label_select_sources"
         />
 
