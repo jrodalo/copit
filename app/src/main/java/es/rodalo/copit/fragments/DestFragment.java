@@ -17,9 +17,11 @@
 package es.rodalo.copit.fragments;
 
 import com.nononsenseapps.filepicker.FilePickerActivity;
+import com.nononsenseapps.filepicker.Utils;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
@@ -230,7 +232,11 @@ public class DestFragment extends Fragment {
 
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_DEST_DIRECTORY) {
 
-            mPath = data.getData().getPath();
+            Uri uri = data.getData();
+
+            File directory = Utils.getFileForUri(uri);
+
+            mPath = Uri.fromFile(directory).getPath();
 
             Preferences.setDestFolder(mPath);
         }
