@@ -33,9 +33,10 @@ import android.widget.TextView;
 
 import java.io.File;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 import es.rodalo.copit.R;
 import es.rodalo.copit.utils.Preferences;
 
@@ -48,14 +49,15 @@ public class DestFragment extends Fragment {
     private static final int REQUEST_DEST_DIRECTORY = 2;
 
     private String mPath;
+    private Unbinder unbinder;
 
-    @Bind(R.id.dest_select_folder_panel) LinearLayout mSelectFolderPanel;
-    @Bind(R.id.dest_main_panel) LinearLayout mMainPanel;
-    @Bind(R.id.dest_main_title) TextView mMainTitle;
-    @Bind(R.id.dest_main_subtitle) TextView mMainSubtitle;
-    @Bind(R.id.dest_progress_panel) LinearLayout mProgressPanel;
-    @Bind(R.id.dest_progress_bar) ProgressBar mProgressBar;
-    @Bind(R.id.dest_progress_subtitle) TextView mProgressSubtitle;
+    @BindView(R.id.dest_select_folder_panel) LinearLayout mSelectFolderPanel;
+    @BindView(R.id.dest_main_panel) LinearLayout mMainPanel;
+    @BindView(R.id.dest_main_title) TextView mMainTitle;
+    @BindView(R.id.dest_main_subtitle) TextView mMainSubtitle;
+    @BindView(R.id.dest_progress_panel) LinearLayout mProgressPanel;
+    @BindView(R.id.dest_progress_bar) ProgressBar mProgressBar;
+    @BindView(R.id.dest_progress_subtitle) TextView mProgressSubtitle;
 
 
     /**
@@ -92,7 +94,7 @@ public class DestFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_dest, container, false);
 
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
 
         return view;
     }
@@ -108,7 +110,7 @@ public class DestFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        unbinder.unbind();
     }
 
 

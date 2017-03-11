@@ -31,8 +31,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import es.rodalo.copit.R;
 import es.rodalo.copit.utils.Files;
 import es.rodalo.copit.utils.Preferences;
@@ -46,10 +47,12 @@ public class SourceFragment extends Fragment {
 
     private List<Sources> mSelectedSources;
 
-    @Bind(R.id.source_select_sources_panel) LinearLayout mSelectSourcesPanel;
-    @Bind(R.id.source_grid_panel) RelativeLayout mMainPanel;
-    @Bind(R.id.source_text_subtitle) TextView mTextSubtitle;
-    @Bind(R.id.source_grid_photos) GridView mGridPhotos;
+    private Unbinder unbinder;
+
+    @BindView(R.id.source_select_sources_panel) LinearLayout mSelectSourcesPanel;
+    @BindView(R.id.source_grid_panel) RelativeLayout mMainPanel;
+    @BindView(R.id.source_text_subtitle) TextView mTextSubtitle;
+    @BindView(R.id.source_grid_photos) GridView mGridPhotos;
 
 
     /**
@@ -66,7 +69,7 @@ public class SourceFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_source, container, false);
 
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
 
         return view;
     }
@@ -87,7 +90,7 @@ public class SourceFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
 
-        ButterKnife.unbind(this);
+        unbinder.unbind();
     }
 
 

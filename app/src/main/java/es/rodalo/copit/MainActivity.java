@@ -30,7 +30,7 @@ import android.view.View;
 
 import java.util.Date;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import es.rodalo.copit.fragments.DestFragment;
@@ -49,7 +49,7 @@ public class MainActivity extends FragmentActivity {
     private SourceFragment mSourceFragment;
     private DestFragment mDestFragment;
 
-    @Bind(R.id.main_fab_copy) FloatingActionButton mFabCopy;
+    @BindView(R.id.main_fab_copy) FloatingActionButton mFabCopy;
 
 
     @Override
