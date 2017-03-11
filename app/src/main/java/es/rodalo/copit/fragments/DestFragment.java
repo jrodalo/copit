@@ -119,7 +119,7 @@ public class DestFragment extends Fragment {
     /**
      * Muestra el selector de directorios para la carpeta de destino
      */
-    @OnClick(R.id.dest_select_folder_button)
+    @OnClick({R.id.dest_select_folder_button, R.id.dest_main_title})
     public void chooseDest() {
 
         Intent i = new Intent(getContext(), FilePickerActivity.class);

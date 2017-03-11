@@ -57,6 +57,6 @@ public class MigrationV7 extends Migration {
      */
     private void initBackupFolderName(SharedPreferences.Editor preferenceEditor) {
 
-        preferenceEditor.putString(Preferences.PREF_BACKUP_FOLDER_NAME, Device.getUserId());
+        preferenceEditor.putString(Preferences.PREF_BACKUP_FOLDER_NAME, Device.getRandomId());
     }
 }

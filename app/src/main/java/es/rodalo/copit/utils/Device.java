@@ -16,11 +16,9 @@
 
 package es.rodalo.copit.utils;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
-import android.provider.Settings;
-
 import java.io.File;
+import java.util.Date;
+
 
 /**
  * Utilidades relacionadas con el dispositivo
@@ -28,41 +26,10 @@ import java.io.File;
 public class Device {
 
 
-    /**
-     * Obtiene un identificador del usuario. Puede ser o bien el nombre de su cuenta de google
-     * más el identificador único de su dispositivo o bien solo el identificador del dispositivo
-     * si no tenía una cuenta de email configurada
-     */
-    public static String getUserId() {
-
-        String email = getUserEmail();
-
-        String userId = (email != null) ? email.substring(0, email.indexOf("@") + 1) : "";
-
-        String deviceId = Settings.Secure.getString(ApplicationContext.getAppContext().getContentResolver(), Settings.Secure.ANDROID_ID);
-
-        return userId + deviceId;
+    public static String getRandomId() {
+        return "" + new Date().getTime();
     }
 
-
-    /**
-     * Obtiene el email del usuario o null si no tiene cuentas configuradas
-     */
-    private static String getUserEmail() {
-
-        Account[] accounts = AccountManager.get(ApplicationContext.getAppContext()).getAccounts();
-
-        String email = null;
-
-        for (Account account : accounts) {
-            if ("com.google".equalsIgnoreCase(account.type)) {
-                email = account.name;
-                break;
-            }
-        }
-
-        return email;
-    }
 
 
     /**

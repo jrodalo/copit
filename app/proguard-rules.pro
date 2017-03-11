@@ -9,6 +9,7 @@
 
 # Add any project specific keep options here:
 
+-keep class es.rodalo.copit.migrations.**
 -keep class butterknife.** { *; }
 -dontwarn butterknife.internal.**
 -keep class **$$ViewBinder { *; }
